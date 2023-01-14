@@ -3,9 +3,9 @@ package pro.sky.animalshelter4.info;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InfoAboutShelter {
+public class InfoAboutCatShelter {
     private final static String infoRu =
-            "Мы-негосударственный приют для кошек Астана.\n\n" +
+            "Мы-негосударственный приют для кошек, Астана.\n\n" +
                     "Приют был открыт 15 октября 2013 года неравнодушными девушками.\n" +
                     "Существует исключительно за счет добровольных пожертвований людей, любящих животных.\n" +
                     "В данный момент мы не имеем своего собственного помещения под приют. Арендуем небольшой домик в частном секторе.\n" +
