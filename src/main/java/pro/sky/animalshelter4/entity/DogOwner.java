@@ -1,17 +1,18 @@
 package pro.sky.animalshelter4.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity(name = "dog_owner")
 public class DogOwner {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nameDog;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_chat_owner")
     private Chat chatOwner;

@@ -10,12 +10,12 @@ public class InfoAboutDogShelter {
                     "Существует исключительно за счет добровольных пожертвований людей, любящих животных.\n" +
                     "В данный момент мы не имеем своего собственного помещения под приют. Арендуем небольшой домик в частном секторе.\n" +
                     "Если вы желаете помочь приюту, то нам всегда необходима помощь.\n\n";
-    public final static String WORK_TIME_AND_ADDRESS_DOG_SHEL = "Время работы:... \n"
+    public final static String WORK_TIME_AND_ADDRESS_DOG_SHELTER = "Время работы:... \n"
             + "Приют для собак расположен по адресу: .....";
 
     public final static String SECURITY_CONTACTS_FOR_REGISTRATION_CAR =
             "Для оформления пропуска на машину Вам потребуется: ...";
-    public final static String SAFETY_ON_THE_DOG_SHEL = "На территории приюта для собак рекомендуем соблюдать" +
+    public final static String SAFETY_ON_THE_DOG_SHELTER = "На территории приюта для собак рекомендуем соблюдать" +
             "следующие правила безопасности: ...";
 
     public final static String DOG_DATING_RULES = "Рекомендации для первой встречи с собакой: ...";
