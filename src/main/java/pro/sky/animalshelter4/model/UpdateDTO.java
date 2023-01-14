@@ -4,9 +4,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-//Data Processing object
+//Data Transfer Object
 @Component
-public class UpdateDPO {
+public class UpdateDTO {
     private Long idChat;
     private String userName;
     private Command command;
@@ -14,10 +14,10 @@ public class UpdateDPO {
     private String idMedia;
     private InteractionUnit interactionUnit;
 
-    public UpdateDPO() {
+    public UpdateDTO() {
     }
 
-    public UpdateDPO(Long idChat, String userName, Command command, String message, String idMedia, InteractionUnit interactionUnit) {
+    public UpdateDTO(Long idChat, String userName, Command command, String message, String idMedia, InteractionUnit interactionUnit) {
         this.idChat = idChat;
         this.userName = userName;
         this.command = command;
@@ -78,8 +78,8 @@ public class UpdateDPO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UpdateDPO updateDpo = (UpdateDPO) o;
-        return idChat.equals(updateDpo.idChat) && userName.equals(updateDpo.userName) && command == updateDpo.command && Objects.equals(message, updateDpo.message) && Objects.equals(idMedia, updateDpo.idMedia) && interactionUnit == updateDpo.interactionUnit;
+        UpdateDTO updateDTO = (UpdateDTO) o;
+        return idChat.equals(updateDTO.idChat) && userName.equals(updateDTO.userName) && command == updateDTO.command && Objects.equals(message, updateDTO.message) && Objects.equals(idMedia, updateDTO.idMedia) && interactionUnit == updateDTO.interactionUnit;
     }
 
     @Override

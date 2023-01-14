@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.animalshelter4.Generator;
 import pro.sky.animalshelter4.model.Command;
 import pro.sky.animalshelter4.model.InteractionUnit;
-import pro.sky.animalshelter4.model.UpdateDPO;
+import pro.sky.animalshelter4.model.UpdateDTO;
 
 import java.util.stream.Stream;
 
@@ -24,9 +24,9 @@ class MapperServiceTest {
 
     @ParameterizedTest
     @MethodSource("paramForToDPO")
-    void toDPO(Update updateTdo, UpdateDPO updateDpo) {
-        UpdateDPO actual = updateDpo;
-        UpdateDPO expected = mapperService.toDPO(updateTdo);
+    void toDPO(Update updateTdo, UpdateDTO updateDTO) {
+        UpdateDTO actual = updateDTO;
+        UpdateDTO expected = mapperService.toDTO(updateTdo);
 
         if (actual != null) {
             assertThat(actual.getMessage()).isEqualTo(expected.getMessage());
@@ -50,7 +50,7 @@ class MapperServiceTest {
                                 50L,
                                 Command.START.getTitle(),
                                 false),
-                        new UpdateDPO(
+                        new UpdateDTO(
                                 50L,
                                 "456",
                                 Command.START,
@@ -68,7 +68,7 @@ class MapperServiceTest {
                                 50L,
                                 Command.START.getTitle() + " fsfdsfs",
                                 false),
-                        new UpdateDPO(
+                        new UpdateDTO(
                                 50L,
                                 "456",
                                 Command.START,
@@ -86,7 +86,7 @@ class MapperServiceTest {
                                 50L,
                                 Command.START.getTitle() + " fsfdsfs sdfsdf sdf s ",
                                 false),
-                        new UpdateDPO(
+                        new UpdateDTO(
                                 50L,
                                 "123",
                                 Command.START,
@@ -104,7 +104,7 @@ class MapperServiceTest {
                                 50L,
                                 Command.START.getTitle() + " " + Command.INFO.getTitle(),
                                 false),
-                        new UpdateDPO(
+                        new UpdateDTO(
                                 50L,
                                 "123",
                                 Command.START,
@@ -133,7 +133,7 @@ class MapperServiceTest {
                                 50L,
                                 "/sagfasd",
                                 false),
-                        new UpdateDPO(
+                        new UpdateDTO(
                                 50L,
                                 "456",
                                 null,

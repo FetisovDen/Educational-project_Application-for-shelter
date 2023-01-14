@@ -3,7 +3,7 @@ package pro.sky.animalshelter4.service;
 import org.springframework.stereotype.Service;
 import pro.sky.animalshelter4.entity.CallRequest;
 import pro.sky.animalshelter4.entity.Chat;
-import pro.sky.animalshelter4.model.UpdateDPO;
+import pro.sky.animalshelter4.model.UpdateDTO;
 import pro.sky.animalshelter4.repository.CallRequestRepository;
 
 import java.time.LocalDateTime;
@@ -24,9 +24,9 @@ public class CallRequestService {
         this.telegramBotSenderService = telegramBotSenderService;
     }
 
-    public void process(UpdateDPO updateDpo) {
-        Chat chatClient = chatService.getChatByIdOrNewWithName(updateDpo.getIdChat(), updateDpo.getUserName());
-        chatClient.setName(updateDpo.getUserName());
+    public void process(UpdateDTO updateDTO) {
+        Chat chatClient = chatService.getChatByIdOrNewWithName(updateDTO.getIdChat(), updateDTO.getUserName());
+        chatClient.setName(updateDTO.getUserName());
         chatService.addChat(chatClient);
 
         Chat chatVolunteer = chatService.getChatOfVolunteer();
