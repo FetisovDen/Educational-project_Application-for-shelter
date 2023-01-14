@@ -50,24 +50,11 @@ CREATE TABLE call_request
     local_date_time_close TIMESTAMP
 );
 
---changeset dfetisov:5
---precondition-sql-check expectedResult:0 SELECT count(*) FROM pg_tables WHERE tablename='unfinished_request'
---onFail=MARK_RAN
-CREATE TABLE unfinished_request
-(
-    id      BIGINT PRIMARY KEY generated always as identity,
-    id_chat BIGINT REFERENCES chat (id),
-    command TEXT NOT NULL
-);
 --changeset zaytsev:6
 --precondition-sql-check expectedResult:1 SELECT count(*) FROM pg_tables WHERE tablename='chat'
 --onFail=MARK_RAN
 ALTER TABLE chat
     drop column city_id;
---changeset zaytsev:7
---precondition-sql-check expectedResult:1 SELECT count(*) FROM pg_tables WHERE tablename='unfinished_request'
---onFail=MARK_RAN
-DROP TABLE city;
 --changeset zaytsev:8
 --precondition-sql-check expectedResult:1 SELECT count(*) FROM pg_tables WHERE tablename='chat'
 --onFail=MARK_RAN
