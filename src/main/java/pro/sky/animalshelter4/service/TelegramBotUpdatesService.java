@@ -68,7 +68,7 @@ public class TelegramBotUpdatesService {
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat());
                         break;
                     case HOW:
-                        telegramBotSenderService.sendHowTakeDog(updateDTO.getIdChat());
+                        telegramBotSenderService.sendDogDatingRules(updateDTO.getIdChat());
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat());
                         break;
                     case CALL_REQUEST:

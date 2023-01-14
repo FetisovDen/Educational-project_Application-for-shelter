@@ -9,9 +9,10 @@ import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import pro.sky.animalshelter4.info.InfoAboutShelter;
+
+import pro.sky.animalshelter4.info.InfoAboutDogShelter;
 import pro.sky.animalshelter4.model.Command;
-import pro.sky.animalshelter4.info.InfoTakeADog;
+
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -78,12 +79,13 @@ public class TelegramBotSenderService {
 
     public void sendInfoAboutShelter(Long idChat) {
         logger.info("ChatId={}; Method sendInfoAboutShelter was started for send info about shelter", idChat);
-        sendMessage(idChat, InfoAboutShelter.getInfoEn());
+        sendMessage(idChat, InfoAboutDogShelter.INFO_ABOUT_DOG_SHELTER);
+
     }
 
-    public void sendHowTakeDog(Long idChat) {
+    public void sendDogDatingRules(Long idChat) {
         logger.info("ChatId={}; Method sendHowTakeDog was started for send how take a dog", idChat);
-        sendMessage(idChat, InfoTakeADog.getInfoEn());
+        sendMessage(idChat, InfoAboutDogShelter.DOG_DATING_RULES);
     }
 
     public void sendButtonsWithOneData(
