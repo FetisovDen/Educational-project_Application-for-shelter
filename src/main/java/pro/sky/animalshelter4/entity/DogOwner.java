@@ -12,7 +12,6 @@ public class DogOwner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nameDog;
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_chat_owner")
     private Chat chatOwner;

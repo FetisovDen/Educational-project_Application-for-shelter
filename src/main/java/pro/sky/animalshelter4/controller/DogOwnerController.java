@@ -12,7 +12,10 @@ import pro.sky.animalshelter4.entity.DogOwner;
 import pro.sky.animalshelter4.service.DogOwnerService;
 
 import java.util.Collection;
-
+/**
+ * Class Controller DogOwnerController
+ * CRUD - Create, Read, Update, Delete
+ */
 @RestController
 @RequestMapping(path = "/dog_owner")
 public class DogOwnerController {
@@ -24,11 +27,11 @@ public class DogOwnerController {
         this.dogOwnerService = dogOwnerService;
     }
 
-    @Operation(summary = "create owner",
+    @Operation(summary = "Create dog owner",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "create owner",
+                            description = "Create dog owner",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = DogOwner.class)
@@ -40,12 +43,12 @@ public class DogOwnerController {
         return dogOwnerService.create(dogOwner);
     }
 
-    @Operation(summary = "search for an dog owner by its Id in the table",
+    @Operation(summary = "Find dog owner by id ",
             responses = {
 
                     @ApiResponse(
                             responseCode = "200",
-                            description = "search for an owner by its Id in the table ",
+                            description = "Find dog owner by id ",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     array = @ArraySchema(schema = @Schema(implementation = DogOwner.class))
@@ -58,9 +61,9 @@ public class DogOwnerController {
 
     }
 
-    @Operation(summary = "editing the owner",
+    @Operation(summary = "Update info about dog owner",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "редактируемый овнер",
+                    description = "Update info about dog owner",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = DogOwner.class)
@@ -78,12 +81,12 @@ public class DogOwnerController {
 
     }
 
-    @Operation(summary = "delete for an owner by its Id in the table",
+    @Operation(summary = "Delete dog owner by id",
             responses = {
 
                     @ApiResponse(
                             responseCode = "200",
-                            description = "delete for an owner by its Id in the table ",
+                            description = "Delete dog owner by id ",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     array = @ArraySchema(schema = @Schema(implementation = DogOwner.class))
@@ -97,11 +100,11 @@ public class DogOwnerController {
 
     }
 
-    @Operation(summary = "search for all owner",
+    @Operation(summary = "Find all dog owners",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "search for all owners",
+                            description = "Find all dog owners",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = DogOwner[].class)

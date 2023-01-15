@@ -9,7 +9,10 @@ import pro.sky.animalshelter4.entity.DogOwner;
 import pro.sky.animalshelter4.repository.DogOwnerRepository;
 
 import java.util.Collection;
-
+/**
+ * Class Service DogOwnerService
+ * CRUD - Create, Read, Update, Delete
+ */
 @Service
 public class DogOwnerService {
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesService.class);
