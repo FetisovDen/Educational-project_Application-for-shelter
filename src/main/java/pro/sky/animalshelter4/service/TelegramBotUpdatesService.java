@@ -49,31 +49,34 @@ public class TelegramBotUpdatesService {
                 }
                 return;
             case MESSAGE:
-                telegramBotSenderService.sendSorryIKnowThis(updateDTO.getIdChat());
+                telegramBotSenderService.sendSorryIKnowThis(updateDTO.getIdChat(),1);
                 return;
             case COMMAND:
                 logger.info("ChatId={}; Method processUpdate start process command = {}",
                         updateDTO.getIdChat(), updateDTO.getCommand());
                 if (updateDTO.getCommand() == null) {
                     telegramBotSenderService.sendUnknownProcess(updateDTO.getIdChat());
-                    telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat());
+                    telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);
                 } else switch (updateDTO.getCommand()) {
                     case START:
                         System.out.println("Detected enter : " +
                                 updateDTO.getIdChat() + " / " + updateDTO.getUserName());
-                        telegramBotSenderService.sendStartButtons(updateDTO.getIdChat(), updateDTO.getUserName());
+                        telegramBotSenderService.sendStartButtons(updateDTO.getIdChat(), updateDTO.getUserName(),0);
                         break;
                     case INFO:
                         telegramBotSenderService.sendInfoAboutShelter(updateDTO.getIdChat());
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat());
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);
                         break;
                     case HOW:
                         telegramBotSenderService.sendDogDatingRules(updateDTO.getIdChat());
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat());
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);
                         break;
                     case CALL_REQUEST:
                         callRequestService.process(updateDTO);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat());
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),4);
+                        break;
+                    case RETURN:
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),0);
                         break;
                     case EMPTY_CALLBACK_DATA_FOR_BUTTON:
                         return;

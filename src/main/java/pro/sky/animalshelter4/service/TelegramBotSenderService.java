@@ -25,10 +25,10 @@ public class TelegramBotSenderService {
     public static final String EMPTY_SYMBOL_FOR_BUTTON = " ";
 
     public static final String REQUEST_SPLIT_SYMBOL = " ";
-    public static final String MESSAGE_SELECT_COMMAND = "Select action";
-    public static final String MESSAGE_SORRY_I_DONT_KNOW_COMMAND = "Sorry, I don't know this command";
-    public static final String MESSAGE_SORRY_I_KNOW_THIS = "Sorry.\nI know only this command:\n";
-    public static final String MESSAGE_HELLO = "Hello ";
+    public static final String MESSAGE_SELECT_COMMAND = "Выбор действия:";
+    public static final String MESSAGE_SORRY_I_DONT_KNOW_COMMAND = "Прошу прощения, я не знаю такой команды";
+    public static final String MESSAGE_SORRY_I_KNOW_THIS = "Прошу прощения.\n Я знаю только данные команды:\n";
+    public static final String MESSAGE_HELLO = "Привет ";
 
 
     private final Logger logger = LoggerFactory.getLogger(TelegramBotSenderService.class);
@@ -65,16 +65,16 @@ public class TelegramBotSenderService {
                 "I know some command:\n" + Command.getAllTitlesAsListExcludeHide(chatService.isVolunteer(idChat)));
     }
 
-    public void sendStartButtons(Long idChat, String userName) {
+    public void sendStartButtons(Long idChat, String userName,int stage) {
         logger.info("ChatId={}; Method sendStartButtons was started for send a welcome message", idChat);
         sendMessage(idChat, MESSAGE_HELLO + userName + ".\n");
-        sendButtonsCommandForChat(idChat);
+        sendButtonsCommandForChat(idChat,stage);
     }
 
-    public void sendSorryIKnowThis(Long idChat) {
+    public void sendSorryIKnowThis(Long idChat,int stage) {
         logger.info("ChatId={}; Method processWhatICan was started for send ability", idChat);
         sendMessage(idChat, MESSAGE_SORRY_I_KNOW_THIS);
-        sendButtonsCommandForChat(idChat);
+        sendButtonsCommandForChat(idChat,stage);
     }
 
     public void sendInfoAboutShelter(Long idChat) {
@@ -170,11 +170,11 @@ public class TelegramBotSenderService {
         sendMessage(idChat, Command.getAllTitlesAsListExcludeHide(chatService.isVolunteer(idChat)));
     }
 
-    public void sendButtonsCommandForChat(Long idChat) {
+    public void sendButtonsCommandForChat(Long idChat,int stage) {
         logger.info("ChatId={}; Method sendListCommandForChat was started for send list of command", idChat);
         boolean isVolunteer = chatService.isVolunteer(idChat);
-        List<String> nameList = Command.getPairListsForButtonExcludeHide(isVolunteer).getFirst();
-        List<String> dataList = Command.getPairListsForButtonExcludeHide(isVolunteer).getSecond();
+        List<String> nameList = Command.getPairListsForButtonExcludeHide(isVolunteer,stage).getFirst();
+        List<String> dataList = Command.getPairListsForButtonExcludeHide(isVolunteer,stage).getSecond();
         int countButtons = nameList.size();
         int width = 0;
         int height = 0;

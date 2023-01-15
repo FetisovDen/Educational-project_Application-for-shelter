@@ -11,9 +11,9 @@ import java.util.List;
 
 @Service
 public class CallRequestService {
-    public final static String MESSAGE_ABOUT_CALL_REQUEST = "You have call request by ";
-    public final static String MESSAGE_VOLUNTEERS_IS_ABSENT = "Sorry. All volunteers is absent";
-    public final static String MESSAGE_OK_VOLUNTEERS_FOUND = "OK. Volunteer will call you";
+    public final static String MESSAGE_ABOUT_CALL_REQUEST = "Поступил запрос от ";
+    public final static String MESSAGE_VOLUNTEERS_IS_ABSENT = "Сейчас все волонтеры заняты, просьба обратиться позже";
+    public final static String MESSAGE_OK_VOLUNTEERS_FOUND = "Хорошо, Волонтер свяжется с вашми";
     private final ChatService chatService;
     private final CallRequestRepository callRequestRepository;
     private final TelegramBotSenderService telegramBotSenderService;
