@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import pro.sky.animalshelter4.info.InfoAboutDogShelter;
+import pro.sky.animalshelter4.info.InfoTest;
+import pro.sky.animalshelter4.info.dogInfoTest;
 import pro.sky.animalshelter4.model.Command;
 
 
@@ -79,7 +81,8 @@ public class TelegramBotSenderService {
 
     public void sendInfoAboutShelter(Long idChat) {
         logger.info("ChatId={}; Method sendInfoAboutShelter was started for send info about shelter", idChat);
-        sendMessage(idChat, InfoAboutDogShelter.INFO_ABOUT_DOG_SHELTER);
+        InfoTest infoTest1= new dogInfoTest();
+        sendMessage(idChat,infoTest1.AboutDog());
 
     }
 

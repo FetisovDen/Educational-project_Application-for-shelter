@@ -4,6 +4,8 @@ import com.pengrad.telegrambot.model.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import pro.sky.animalshelter4.info.InfoTest;
+import pro.sky.animalshelter4.info.dogInfoTest;
 import pro.sky.animalshelter4.model.Command;
 import pro.sky.animalshelter4.model.UpdateDTO;
 
@@ -77,6 +79,7 @@ public class TelegramBotUpdatesService {
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),2);
                         break;
                     case SCHEDULE:
+                        telegramBotSenderService.sendInfoAboutShelter(updateDTO.getIdChat());
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),2);
                         break;
                     case CAR_PASS:
