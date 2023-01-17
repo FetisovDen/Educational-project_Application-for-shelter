@@ -3,7 +3,7 @@ package pro.sky.animalshelter4.service;
 import org.springframework.stereotype.Service;
 import pro.sky.animalshelter4.entity.CallRequest;
 import pro.sky.animalshelter4.entity.Chat;
-import pro.sky.animalshelter4.model.UpdateDPO;
+import pro.sky.animalshelter4.model.UpdateDTO;
 import pro.sky.animalshelter4.repository.CallRequestRepository;
 
 import java.time.LocalDateTime;
@@ -11,9 +11,9 @@ import java.util.List;
 
 @Service
 public class CallRequestService {
-    public final static String MESSAGE_ABOUT_CALL_REQUEST = "You have call request by ";
-    public final static String MESSAGE_VOLUNTEERS_IS_ABSENT = "Sorry. All volunteers is absent";
-    public final static String MESSAGE_OK_VOLUNTEERS_FOUND = "OK. Volunteer will call you";
+    public final static String MESSAGE_ABOUT_CALL_REQUEST = "Поступил запрос от ";
+    public final static String MESSAGE_VOLUNTEERS_IS_ABSENT = "Сейчас все волонтеры заняты, просьба обратиться позже";
+    public final static String MESSAGE_OK_VOLUNTEERS_FOUND = "Хорошо, Волонтер свяжется с вашми";
     private final ChatService chatService;
     private final CallRequestRepository callRequestRepository;
     private final TelegramBotSenderService telegramBotSenderService;
@@ -24,9 +24,9 @@ public class CallRequestService {
         this.telegramBotSenderService = telegramBotSenderService;
     }
 
-    public void process(UpdateDPO updateDpo) {
-        Chat chatClient = chatService.getChatByIdOrNewWithName(updateDpo.getIdChat(), updateDpo.getUserName());
-        chatClient.setName(updateDpo.getUserName());
+    public void process(UpdateDTO updateDTO) {
+        Chat chatClient = chatService.getChatByIdOrNewWithName(updateDTO.getIdChat(), updateDTO.getUserName());
+        chatClient.setName(updateDTO.getUserName());
         chatService.addChat(chatClient);
 
         Chat chatVolunteer = chatService.getChatOfVolunteer();

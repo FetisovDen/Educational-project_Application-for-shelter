@@ -19,8 +19,7 @@ import pro.sky.animalshelter4.Generator;
 import pro.sky.animalshelter4.entity.CallRequest;
 import pro.sky.animalshelter4.model.Command;
 import pro.sky.animalshelter4.entity.Chat;
-import pro.sky.animalshelter4.info.InfoAboutShelter;
-import pro.sky.animalshelter4.info.InfoTakeADog;
+import pro.sky.animalshelter4.info.InfoAboutDogShelter;
 import pro.sky.animalshelter4.repository.CallRequestRepository;
 import pro.sky.animalshelter4.repository.ChatRepository;
 import pro.sky.animalshelter4.service.*;
@@ -142,15 +141,15 @@ class TelegramBotUpdatesListenerTest {
         SendMessage actual4 = actualList.get(4);
         SendMessage actual5 = actualList.get(5);
         Assertions.assertThat(actual0.getParameters().get("chat_id")).isEqualTo(id);
-        Assertions.assertThat(actual0.getParameters().get("text")).isEqualTo(InfoAboutShelter.getInfoEn());
+        Assertions.assertThat(actual0.getParameters().get("text")).isEqualTo(InfoAboutDogShelter.INFO_ABOUT_DOG_SHELTER);
         Assertions.assertThat(actual1.getParameters().get("chat_id")).isEqualTo(id);
         Assertions.assertThat(actual1.getParameters().get("text")).isEqualTo(TelegramBotSenderService.MESSAGE_SELECT_COMMAND);
         Assertions.assertThat(actual2.getParameters().get("chat_id")).isEqualTo(id);
-        Assertions.assertThat(actual2.getParameters().get("text")).isEqualTo(InfoAboutShelter.getInfoEn());
+        Assertions.assertThat(actual2.getParameters().get("text")).isEqualTo(InfoAboutDogShelter.INFO_ABOUT_DOG_SHELTER);
         Assertions.assertThat(actual3.getParameters().get("chat_id")).isEqualTo(id);
         Assertions.assertThat(actual3.getParameters().get("text")).isEqualTo(TelegramBotSenderService.MESSAGE_SELECT_COMMAND);
         Assertions.assertThat(actual4.getParameters().get("chat_id")).isEqualTo(id);
-        Assertions.assertThat(actual4.getParameters().get("text")).isEqualTo(InfoAboutShelter.getInfoEn());
+        Assertions.assertThat(actual4.getParameters().get("text")).isEqualTo(InfoAboutDogShelter.INFO_ABOUT_DOG_SHELTER);
         Assertions.assertThat(actual5.getParameters().get("chat_id")).isEqualTo(id);
         Assertions.assertThat(actual5.getParameters().get("text")).isEqualTo(TelegramBotSenderService.MESSAGE_SELECT_COMMAND);
     }
@@ -172,11 +171,11 @@ class TelegramBotUpdatesListenerTest {
         SendMessage actual2 = actualList.get(2);
         SendMessage actual3 = actualList.get(3);
         Assertions.assertThat(actual0.getParameters().get("chat_id")).isEqualTo(id);
-        Assertions.assertThat(actual0.getParameters().get("text")).isEqualTo(InfoTakeADog.getInfoEn());
+        Assertions.assertThat(actual0.getParameters().get("text")).isEqualTo(InfoAboutDogShelter.DOG_DATING_RULES);
         Assertions.assertThat(actual1.getParameters().get("chat_id")).isEqualTo(id);
         Assertions.assertThat(actual1.getParameters().get("text")).isEqualTo(TelegramBotSenderService.MESSAGE_SELECT_COMMAND);
         Assertions.assertThat(actual2.getParameters().get("chat_id")).isEqualTo(id);
-        Assertions.assertThat(actual2.getParameters().get("text")).isEqualTo(InfoTakeADog.getInfoEn());
+        Assertions.assertThat(actual2.getParameters().get("text")).isEqualTo(InfoAboutDogShelter.DOG_DATING_RULES);
         Assertions.assertThat(actual3.getParameters().get("chat_id")).isEqualTo(id);
         Assertions.assertThat(actual3.getParameters().get("text")).isEqualTo(TelegramBotSenderService.MESSAGE_SELECT_COMMAND);
     }
