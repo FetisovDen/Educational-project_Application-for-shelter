@@ -73,17 +73,30 @@ public class TelegramBotUpdatesService {
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);
                         break;
                     case INFO:
-                        if (choosingShelter ==1){
                         telegramBotSenderService.sendInfoAboutShelter(updateDTO.getIdChat());
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);}
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),2);
                         break;
+                    case SCHEDULE:
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),2);
+                        break;
+                    case CAR_PASS:
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),2);
+                        break;
+                    case SAFETY_PRECAUTIONS:
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),2);
+                        break;
+                    case LEAVE_NUMBER:
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),2);
+                        break;
+
                     case HOW:
                         telegramBotSenderService.sendDogDatingRules(updateDTO.getIdChat());
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),3);
                         break;
+
                     case CALL_REQUEST:
                         callRequestService.process(updateDTO);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),5);
                         break;
                     case RETURN:
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),0);

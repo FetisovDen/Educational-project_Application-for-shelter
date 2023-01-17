@@ -173,6 +173,7 @@ public class TelegramBotSenderService {
     public void sendButtonsCommandForChat(Long idChat,int stage) {
         logger.info("ChatId={}; Method sendListCommandForChat was started for send list of command", idChat);
         boolean isVolunteer = chatService.isVolunteer(idChat);
+        Command.adjustmentPermanentCommands(stage);
         List<String> nameList = Command.getPairListsForButtonExcludeHide(isVolunteer,stage).getFirst();
         List<String> dataList = Command.getPairListsForButtonExcludeHide(isVolunteer,stage).getSecond();
         int countButtons = nameList.size();

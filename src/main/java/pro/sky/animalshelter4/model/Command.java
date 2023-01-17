@@ -16,17 +16,27 @@ public enum Command {
      * private final boolean isPublic (<b>isPublic = true</b> видна для всех(не волонтёры));<br>
      * private final boolean isVolunteer (<b>isVolunteer = true</b> видна для админов(волонтёров));<br>
      */
-
+//stage 0
     START(0, "/start", "START", true, true, true,0),
-    CAT_SHELTER(1, "/cat", "Приют для кошек", false, true, true,-1),
-    DOG_SHELTER(1, "/dog", "Приют для собак", false, true, true,-1),
-    INFO(1, "/info", "О нас", false, true, true,1),
-    HOW(2, "/HOW", "Как взять собаку?", false, true, true,1),
-    CALL_REQUEST(3, "/CALL_REQUEST", "Позвать волонтера", false, true, false,1),
-    CALL_CLIENT(4, "/CALL_CLIENT", "Связаться с клиентом", false, false, true,1),
-    RETURN(5,"/return","Обратно",false,true,true,1),
-    EMPTY_CALLBACK_DATA_FOR_BUTTON(-1, "...", "", true, true, true,0);
+    CAT_SHELTER(1, "/cat", "Приют для кошек", false, true, true,0),
+    DOG_SHELTER(2, "/dog", "Приют для собак", false, true, true,0),
+    EMPTY_CALLBACK_DATA_FOR_BUTTON(-1, "...", "", true, true, true,0),
 
+//stage 1
+    INFO(3, "/info", "О нас", false, true, true,1),
+    HOW(4, "/HOW", "Как взять собаку?", false, true, true,1),
+
+//stage 2
+    SCHEDULE(5, "/schedule", "График работы", false, true, true,2),
+    CAR_PASS(6, "/pass", "Оформление пропуска для машины", false, true, true,2),
+    SAFETY_PRECAUTIONS(7, "/safety", "Тех.безопасности", false, true, true,2),
+    LEAVE_NUMBER(8, "/phone", "Оставить номер", false, true, true,2),
+
+
+//stage 5 (Команды появляются на каждом этапе клавиатуры, кроме нулевого (stage = 0),регулируется методом adjustmentPermanentCommands )
+    CALL_REQUEST(9, "/CALL_REQUEST", "Позвать волонтера", false, true, false,5),
+    CALL_CLIENT(10, "/CALL_CLIENT", "Связаться с клиентом", false, false, true,5),
+    RETURN(11,"/return","Обратно",false,true,true,5);
 
     private final int order;
     private final String title;
@@ -34,7 +44,7 @@ public enum Command {
     private final boolean isHide;
     private final boolean isPublic;
     private final boolean isVolunteer;
-    private final int stage;
+    private int stage;
 
     Command(int order, String title, String nameButton, boolean isHide, boolean isPublic, boolean isVolunteer, int stage) {
         this.order = order;
@@ -74,6 +84,9 @@ public enum Command {
         return stage;
     }
 
+    public void setStage(int stage) {
+        this.stage = stage;
+    }
 
     public static Command fromString(String text) {
         for (Command command : Command.values()) {
@@ -109,26 +122,15 @@ public enum Command {
         }
         return sb.toString();
     }
-
-    public static List<String> getAllTitlesExcludeHide(boolean forVolunteer) {
-        if (!forVolunteer) {
-            return Stream.of(
-                            Command.values()).
-                    filter(command -> !command.isHide).
-                    filter(command -> command.isPublic).
-                    sorted(Comparator.comparingInt(Command::getOrder)).
-                    map(Command::getTitle).
-                    collect(Collectors.toList());
-        } else {
-            return Stream.of(
-                            Command.values()).
-                    filter(command -> !command.isVolunteer).
-                    filter(command -> command.isPublic).
-                    sorted(Comparator.comparingInt(Command::getOrder)).
-                    map(Command::getTitle).
-                    collect(Collectors.toList());
+   public static int adjustmentPermanentCommands (int stage){
+        if (stage != 0){
+            Command.RETURN.setStage(stage);
+            Command.CALL_CLIENT.setStage(stage);
+            Command.CALL_REQUEST.setStage(stage);
         }
-    }
+        return  stage;
+        }
+
 
     public static Pair<List<String>, List<String>> getPairListsForButtonExcludeHide(boolean forVolunteer, int stage) {
         if (!forVolunteer) {
@@ -137,7 +139,7 @@ public enum Command {
                                     Command.values()).
                             filter(command -> !command.isHide).
                             filter(command -> command.isPublic).
-                            filter(command -> command.stage == stage || command.stage==stage -1).
+                            filter(command -> command.stage == stage).
                             sorted(Comparator.comparingInt(Command::getOrder)).
                             map(Command::getNameButton).
                             collect(Collectors.toList()),
@@ -145,7 +147,7 @@ public enum Command {
                                     Command.values()).
                             filter(command -> !command.isHide).
                             filter(command -> command.isPublic).
-                            filter(command -> command.stage == stage || command.stage ==stage -1).
+                            filter(command -> command.stage == stage).
                             sorted(Comparator.comparingInt(Command::getOrder)).
                             map(Command::getTitle).
                             collect(Collectors.toList()));
@@ -155,7 +157,7 @@ public enum Command {
                                     Command.values()).
                             filter(command -> !command.isHide).
                             filter(command -> command.isVolunteer).
-                            filter(command -> command.stage == stage || command.stage == stage -1).
+                            filter(command -> command.stage == stage ).
                             sorted(Comparator.comparingInt(Command::getOrder)).
                             map(Command::getNameButton).
                             collect(Collectors.toList()),
@@ -163,7 +165,7 @@ public enum Command {
                                     Command.values()).
                             filter(command -> !command.isHide).
                             filter(command -> command.isVolunteer).
-                            filter(command -> command.stage == stage || command.stage==stage -1).
+                            filter(command -> command.stage == stage ).
                             sorted(Comparator.comparingInt(Command::getOrder)).
                             map(Command::getTitle).
                             collect(Collectors.toList()));
