@@ -11,6 +11,7 @@ import java.io.IOException;
 
 @Service
 public class TelegramBotUpdatesService {
+    private int choosingShelter;
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesService.class);
     private final TelegramBotSenderService telegramBotSenderService;
     private final MapperService mapperService;
@@ -49,23 +50,32 @@ public class TelegramBotUpdatesService {
                 }
                 return;
             case MESSAGE:
-                telegramBotSenderService.sendSorryIKnowThis(updateDTO.getIdChat(),1);
+                telegramBotSenderService.sendSorryIKnowThis(updateDTO.getIdChat(),0);
                 return;
             case COMMAND:
                 logger.info("ChatId={}; Method processUpdate start process command = {}",
                         updateDTO.getIdChat(), updateDTO.getCommand());
                 if (updateDTO.getCommand() == null) {
                     telegramBotSenderService.sendUnknownProcess(updateDTO.getIdChat());
-                    telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);
+                    telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),0);
                 } else switch (updateDTO.getCommand()) {
                     case START:
                         System.out.println("Detected enter : " +
                                 updateDTO.getIdChat() + " / " + updateDTO.getUserName());
                         telegramBotSenderService.sendStartButtons(updateDTO.getIdChat(), updateDTO.getUserName(),0);
                         break;
-                    case INFO:
-                        telegramBotSenderService.sendInfoAboutShelter(updateDTO.getIdChat());
+                    case CAT_SHELTER:
+                        choosingShelter = 1;
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);
+                        break;
+                    case DOG_SHELTER:
+                        choosingShelter = 2;
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);
+                        break;
+                    case INFO:
+                        if (choosingShelter ==1){
+                        telegramBotSenderService.sendInfoAboutShelter(updateDTO.getIdChat());
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);}
                         break;
                     case HOW:
                         telegramBotSenderService.sendDogDatingRules(updateDTO.getIdChat());
@@ -73,7 +83,7 @@ public class TelegramBotUpdatesService {
                         break;
                     case CALL_REQUEST:
                         callRequestService.process(updateDTO);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),4);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),1);
                         break;
                     case RETURN:
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),0);

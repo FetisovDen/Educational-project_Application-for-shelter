@@ -28,7 +28,7 @@ public class TelegramBotSenderService {
     public static final String MESSAGE_SELECT_COMMAND = "Выбор действия:";
     public static final String MESSAGE_SORRY_I_DONT_KNOW_COMMAND = "Прошу прощения, я не знаю такой команды";
     public static final String MESSAGE_SORRY_I_KNOW_THIS = "Прошу прощения.\n Я знаю только данные команды:\n";
-    public static final String MESSAGE_HELLO = "Привет ";
+    public static final String MESSAGE_HELLO = "Привет, ";
 
 
     private final Logger logger = LoggerFactory.getLogger(TelegramBotSenderService.class);

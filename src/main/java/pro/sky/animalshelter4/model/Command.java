@@ -17,13 +17,15 @@ public enum Command {
      * private final boolean isVolunteer (<b>isVolunteer = true</b> видна для админов(волонтёров));<br>
      */
 
-    START(0, "/start", "START", true, true, true,5),
+    START(0, "/start", "START", true, true, true,0),
+    CAT_SHELTER(1, "/cat", "Приют для кошек", false, true, true,-1),
+    DOG_SHELTER(1, "/dog", "Приют для собак", false, true, true,-1),
     INFO(1, "/info", "О нас", false, true, true,1),
     HOW(2, "/HOW", "Как взять собаку?", false, true, true,1),
-    CALL_REQUEST(3, "/CALL_REQUEST", "Позвать волонтера", false, true, false,5),
-    CALL_CLIENT(4, "/CALL_CLIENT", "Связаться с клиентом", false, false, true,5),
-    RETURN(5,"/return","Обратно",false,true,true,5),
-    EMPTY_CALLBACK_DATA_FOR_BUTTON(-1, "...", "", true, true, true,5);
+    CALL_REQUEST(3, "/CALL_REQUEST", "Позвать волонтера", false, true, false,1),
+    CALL_CLIENT(4, "/CALL_CLIENT", "Связаться с клиентом", false, false, true,1),
+    RETURN(5,"/return","Обратно",false,true,true,1),
+    EMPTY_CALLBACK_DATA_FOR_BUTTON(-1, "...", "", true, true, true,0);
 
 
     private final int order;
@@ -71,6 +73,7 @@ public enum Command {
     public int getStage() {
         return stage;
     }
+
 
     public static Command fromString(String text) {
         for (Command command : Command.values()) {
@@ -134,7 +137,7 @@ public enum Command {
                                     Command.values()).
                             filter(command -> !command.isHide).
                             filter(command -> command.isPublic).
-                            filter(command -> command.stage > stage).
+                            filter(command -> command.stage == stage || command.stage==stage -1).
                             sorted(Comparator.comparingInt(Command::getOrder)).
                             map(Command::getNameButton).
                             collect(Collectors.toList()),
@@ -142,7 +145,7 @@ public enum Command {
                                     Command.values()).
                             filter(command -> !command.isHide).
                             filter(command -> command.isPublic).
-                            filter(command -> command.stage > stage).
+                            filter(command -> command.stage == stage || command.stage ==stage -1).
                             sorted(Comparator.comparingInt(Command::getOrder)).
                             map(Command::getTitle).
                             collect(Collectors.toList()));
@@ -152,7 +155,7 @@ public enum Command {
                                     Command.values()).
                             filter(command -> !command.isHide).
                             filter(command -> command.isVolunteer).
-                            filter(command -> command.stage > stage).
+                            filter(command -> command.stage == stage || command.stage == stage -1).
                             sorted(Comparator.comparingInt(Command::getOrder)).
                             map(Command::getNameButton).
                             collect(Collectors.toList()),
@@ -160,7 +163,7 @@ public enum Command {
                                     Command.values()).
                             filter(command -> !command.isHide).
                             filter(command -> command.isVolunteer).
-                            filter(command -> command.stage > stage).
+                            filter(command -> command.stage == stage || command.stage==stage -1).
                             sorted(Comparator.comparingInt(Command::getOrder)).
                             map(Command::getTitle).
                             collect(Collectors.toList()));
