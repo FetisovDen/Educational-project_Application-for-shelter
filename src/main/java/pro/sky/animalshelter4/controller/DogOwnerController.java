@@ -31,14 +31,14 @@ public class DogOwnerController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Create dog owner",
+                            description = "Dog owner created",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = DogOwner.class)
                             )
                     )
             })
-    @PostMapping("/creat")
+    @PostMapping
     public DogOwner create(@RequestBody DogOwner dogOwner) {
         return dogOwnerService.create(dogOwner);
     }
@@ -48,14 +48,14 @@ public class DogOwnerController {
 
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Find dog owner by id ",
+                            description = "Dog owner found by id",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     array = @ArraySchema(schema = @Schema(implementation = DogOwner.class))
                             )
                     )
             })
-    @GetMapping("/read/{id}")
+    @GetMapping("/{id}")
     public DogOwner read(@PathVariable long id) {
         return dogOwnerService.read(id);
 
@@ -63,7 +63,7 @@ public class DogOwnerController {
 
     @Operation(summary = "Update info about dog owner",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Update info about dog owner",
+                    description = "Information on the owner has been updated",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = DogOwner.class)
@@ -71,7 +71,7 @@ public class DogOwnerController {
 
             )
     )
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<DogOwner> update(@RequestBody DogOwner dogOwner) {
         DogOwner dgOwner = dogOwnerService.update(dogOwner);
         if (dgOwner == null) {
@@ -86,7 +86,7 @@ public class DogOwnerController {
 
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Delete dog owner by id ",
+                            description = "Dog owner removed",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     array = @ArraySchema(schema = @Schema(implementation = DogOwner.class))
@@ -94,7 +94,7 @@ public class DogOwnerController {
                     )
             })
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable long id) {
         dogOwnerService.delete(id);
 
@@ -104,14 +104,14 @@ public class DogOwnerController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Find all dog owners",
+                            description = "All dog owners have been found",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = DogOwner[].class)
                             )
                     )
             })
-    @GetMapping("/readAll")
+    @GetMapping
     public Collection<DogOwner> read() {
         return dogOwnerService.readAll();
     }

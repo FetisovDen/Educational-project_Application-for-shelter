@@ -15,7 +15,7 @@ import java.util.Collection;
  */
 @Service
 public class DogOwnerService {
-    private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesService.class);
+    private final Logger logger = LoggerFactory.getLogger(DogOwnerService.class);
 
     private final DogOwnerRepository dogOwnerRepository;
 
