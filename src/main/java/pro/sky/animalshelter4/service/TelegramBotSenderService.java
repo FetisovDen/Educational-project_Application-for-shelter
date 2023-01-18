@@ -10,9 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import pro.sky.animalshelter4.info.InfoAboutDogShelter;
-import pro.sky.animalshelter4.info.InfoTest;
-import pro.sky.animalshelter4.info.dogInfoTest;
+
+import pro.sky.animalshelter4.info.InfoCatShelterImpl;
+import pro.sky.animalshelter4.info.InfoDogShelterImpl;
+import pro.sky.animalshelter4.info.InfoShelter;
 import pro.sky.animalshelter4.model.Command;
 
 
@@ -61,71 +62,115 @@ public class TelegramBotSenderService {
         sendMessage(idChat, MESSAGE_SORRY_I_DONT_KNOW_COMMAND);
     }
 
-    public void sendStart(Long idChat, String userName) {
-        logger.info("ChatId={}; Method sendStart was started for send a welcome message", idChat);
-        sendMessage(idChat, "Hello " + userName + ".\n" +
-                "I know some command:\n" + Command.getAllTitlesAsListExcludeHide(chatService.isVolunteer(idChat)));
-    }
-
-    public void sendStartButtons(Long idChat, String userName,int stage) {
+    public void sendStartButtons(Long idChat, String userName, int stage, String choosingShelter) {
         logger.info("ChatId={}; Method sendStartButtons was started for send a welcome message", idChat);
         sendMessage(idChat, MESSAGE_HELLO + userName + ".\n");
-        sendButtonsCommandForChat(idChat,stage);
+        sendButtonsCommandForChat(idChat, stage, choosingShelter);
     }
 
-    public void sendSorryIKnowThis(Long idChat,int stage) {
+    public void sendSorryIKnowThis(Long idChat, int stage, String choosingShelter) {
         logger.info("ChatId={}; Method processWhatICan was started for send ability", idChat);
         sendMessage(idChat, MESSAGE_SORRY_I_KNOW_THIS);
-        sendButtonsCommandForChat(idChat,stage);
+        sendButtonsCommandForChat(idChat, stage, choosingShelter);
     }
 
-    public void sendInfoAboutShelter(Long idChat) {
-        logger.info("ChatId={}; Method sendInfoAboutShelter was started for send info about shelter", idChat);
-        InfoTest infoTest1= new dogInfoTest();
-        sendMessage(idChat,infoTest1.AboutDog());
-
-    }
-
-    public void sendDogDatingRules(Long idChat) {
-        logger.info("ChatId={}; Method sendHowTakeDog was started for send how take a dog", idChat);
-        sendMessage(idChat, InfoAboutDogShelter.DOG_DATING_RULES);
-    }
-
-    public void sendButtonsWithOneData(
-            Long idChat,
-            String caption,
-            String command,
-            List<String> nameButtons,
-            List<String> dataButtons,
-            int width, int height) {
-        logger.info("ChatId={}; Method sendButtonsWithCommonData was started for send buttons", idChat);
-        if (nameButtons.size() != dataButtons.size()) {
-            logger.debug("ChatId={}; Method sendButtonsWithCommonData detect different size of Lists", idChat);
-            return;
+    public InfoShelter checkWhatShelter(String choosingShelter) {
+        if (choosingShelter.equals("cat")) {
+            return new InfoCatShelterImpl();
         }
-        InlineKeyboardButton[][] tableButtons = new InlineKeyboardButton[height][width];
-        int countNameButtons = 0;
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (countNameButtons < nameButtons.size()) {
-                    tableButtons[i][j] = new InlineKeyboardButton(nameButtons.get(countNameButtons))
-                            .callbackData(command + REQUEST_SPLIT_SYMBOL + dataButtons.get(countNameButtons));
-                } else {
-                    tableButtons[i][j] = new InlineKeyboardButton(EMPTY_SYMBOL_FOR_BUTTON)
-                            .callbackData(Command.EMPTY_CALLBACK_DATA_FOR_BUTTON.getTitle());
-                }
-                countNameButtons++;
+        if (choosingShelter.equals("dog")) {
+            return new InfoDogShelterImpl();
+        }
+        return new InfoShelter() {
+            @Override
+            public String datingRules() {
+                return null;
             }
-        }
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(tableButtons);
-        SendMessage message = new SendMessage(idChat, caption).replyMarkup(inlineKeyboardMarkup);
-        SendResponse response = telegramBot.execute(message);
-        if (response.isOk()) {
-            logger.debug("ChatId={}; Method sendButtonsWithCommonData has completed sending the message", idChat);
-        } else {
-            logger.debug("ChatId={}; Method sendButtonsWithCommonData received an error : {}",
-                    idChat, response.errorCode());
-        }
+
+            @Override
+            public String homeEquipForBaby() {
+                return null;
+            }
+
+            @Override
+            public String homeEquipForAdult() {
+                return null;
+            }
+
+            @Override
+            public String homeEquipForPetWithDisabilities() {
+                return null;
+            }
+        };
+    }
+
+    public void sendInfoAboutShelter(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendInfoAboutShelter was started for send info about shelter", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).infoAboutShelter());
+    }
+
+    public void sendInfoAboutScheduleAndAddress(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendInfoAboutScheduleAndAddress was started for send info about shelter", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).infoAboutScheduleAndAddress());
+    }
+
+    public void sendInfoAboutCarPass(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendInfoAboutCarPass was started for send info about shelter", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).infoAboutCarPass());
+    }
+
+    public void sendInfoAboutSafetyRegulations(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendInfoAboutSafetyRegulations was started for send info about shelter", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).infoAboutSafetyRegulations());
+    }
+
+    public void sendInfoAboutLeaveNumber(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendInfoAboutLeaveNumber was started for send info about shelter", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).leaveNumber());
+    }
+
+    public void sendDogDatingRules(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendDogDatingRules was started for send how take a dog", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).datingRules());
+    }
+    public void sendDocsForTaking(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendDocsForTaking was started for send how take a dog", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).docsForTaking());
+    }
+
+    public void sendTransportationInfo(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendTransportationInfo was started for send how take a dog", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).transportation());
+    }
+
+    public void sendHomeEquipForBaby(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendHomeEquipForBaby was started for send how take a dog", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).homeEquipForBaby());
+    }
+
+    public void sendHomeEquipForAdult(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendHomeEquipForAdult was started for send how take a dog", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).homeEquipForAdult());
+    }
+
+    public void sendHomeEquipForPetWithDisabilities(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendHomeEquipForPetWithDisabilities was started for send how take a dog", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).homeEquipForPetWithDisabilities());
+    }
+
+    public void sendCytologistFirst(Long idChat) {
+        logger.info("ChatId={}; Method sendCytologistFirst was started for send how take a dog", idChat);
+        sendMessage(idChat, InfoDogShelterImpl.cytologistFirst());
+    }
+
+    public void sendCytologistContacts(Long idChat) {
+        logger.info("ChatId={}; Method sendCytologistContacts was started for send how take a dog", idChat);
+        sendMessage(idChat, InfoDogShelterImpl.cytologistContacts());
+    }
+
+    public void sendReasonsForRefusal(Long idChat, String choosingShelter) {
+        logger.info("ChatId={}; Method sendReasonsForRefusal was started for send how take a dog", idChat);
+        sendMessage(idChat, checkWhatShelter(choosingShelter).reasonsForRefusal());
     }
 
     public void sendButtonsWithDifferentData(
@@ -158,7 +203,6 @@ public class TelegramBotSenderService {
         SendResponse response = telegramBot.execute(message);
         if (response == null) {
             logger.debug("ChatId={}; Method sendButtonsWithDifferentData did not receive a response", idChat);
-            return;
         } else if (response.isOk()) {
             logger.debug("ChatId={}; Method sendButtonsWithDifferentData has completed sending the message", idChat);
         } else {
@@ -167,18 +211,12 @@ public class TelegramBotSenderService {
         }
     }
 
-
-    public void sendListCommandForChat(Long idChat) {
-        logger.info("ChatId={}; Method sendListCommandForChat was started for send list of command", idChat);
-        sendMessage(idChat, Command.getAllTitlesAsListExcludeHide(chatService.isVolunteer(idChat)));
-    }
-
-    public void sendButtonsCommandForChat(Long idChat,int stage) {
+    public void sendButtonsCommandForChat(Long idChat, int stage, String pet) {
         logger.info("ChatId={}; Method sendListCommandForChat was started for send list of command", idChat);
         boolean isVolunteer = chatService.isVolunteer(idChat);
-        Command.adjustmentPermanentCommands(stage);
-        List<String> nameList = Command.getPairListsForButtonExcludeHide(isVolunteer,stage).getFirst();
-        List<String> dataList = Command.getPairListsForButtonExcludeHide(isVolunteer,stage).getSecond();
+        Command.regulatingCommands(stage, pet);
+        List<String> nameList = Command.getPairListsForButtonExcludeHide(isVolunteer, stage).getFirst();
+        List<String> dataList = Command.getPairListsForButtonExcludeHide(isVolunteer, stage).getSecond();
         int countButtons = nameList.size();
         int width = 0;
         int height = 0;
@@ -202,6 +240,9 @@ public class TelegramBotSenderService {
         } else if (countButtons % 2 == 0) {
             width = 2;
             height = countButtons / 2;
+        } else if (countButtons % 9 == 0) {
+            width = 9;
+            height = countButtons / 9;
         }
         sendButtonsWithDifferentData(
                 idChat,
@@ -217,6 +258,5 @@ public class TelegramBotSenderService {
         SendPhoto sendPhoto = new SendPhoto(idChat, file);
         telegramBot.execute(sendPhoto).message();
     }
-
 }
 
