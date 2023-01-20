@@ -1,4 +1,4 @@
-package pro.sky.animalshelter4.info;
+package pro.sky.animalshelter4.info.infoShelter;
 
 import org.springframework.stereotype.Component;
 

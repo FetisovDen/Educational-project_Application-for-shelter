@@ -10,6 +10,7 @@ public class Chat {
     private String phone;
     private String address;
     boolean isVolunteer;
+    boolean isOwner;
 
     public Chat() {
     }
@@ -54,5 +55,12 @@ public class Chat {
         this.address = address;
     }
 
+    public boolean isOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(boolean owner) {
+        isOwner = owner;
+    }
 }
 

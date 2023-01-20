@@ -40,3 +40,9 @@ CREATE TABLE dog_owner
     name_Dog       TEXT NOT NULL,
     id_chat_owner BIGINT REFERENCES chat (id)
 );
+
+--changeset dfetisov:5
+--precondition-sql-check expectedResult:1 SELECT count(*) FROM pg_tables WHERE tablename='chat'
+--onFail=MARK_RAN
+ALTER TABLE chat
+ADD COLUMN is_owner BOOLEAN DEFAULT FALSE;

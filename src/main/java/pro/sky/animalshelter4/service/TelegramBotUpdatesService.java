@@ -128,6 +128,8 @@ public class TelegramBotUpdatesService {
                         telegramBotSenderService.sendReasonsForRefusal(updateDTO.getIdChat(),choosingShelter);
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3,choosingShelter);
                         break;
+                    case REPORT:
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),4,choosingShelter);
 
                     case LEAVE_NUMBER:
                         telegramBotSenderService.sendInfoAboutLeaveNumber(updateDTO.getIdChat(),choosingShelter);

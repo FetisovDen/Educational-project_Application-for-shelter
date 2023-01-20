@@ -60,9 +60,21 @@ public class ChatService {
         logger.debug("Method isVolunteer don't detected volunteer by idChat = {}", id);
         return true;
     }
+    public boolean isOwner(Long id) {
+        logger.info("Method isOwner was start for to check if the chat with id = {} is a owner", id);
+        Chat chat = findChat(id);
+        if (chat == null || !chat.isOwner()) {
+            logger.debug("Method isVolunteer detected volunteer by idChat = {}", id);
+            return false;
+        }
+        logger.debug("Method isVolunteer don't detected volunteer by idChat = {}", id);
+        return true;
+    }
 
     public Chat getChatOfVolunteer() {
         return chatRepository.getChatOfVolunteer();
 //        return null;
     }
+
+
 }
