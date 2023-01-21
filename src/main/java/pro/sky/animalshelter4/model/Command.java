@@ -59,7 +59,7 @@ public enum Command {
     LEAVE_NUMBER(18, "/phone", "Оставить номер", false, true, true,true, 5),
     CALL_REQUEST(19, "/CALL_REQUEST", "Позвать волонтера", false, true, false,true, 5),
     CALL_CLIENT(20, "/CALL_CLIENT", "Связаться с клиентом", false, false, true,false, 5),
-    RETURN(21, "/return", "Обратно", false, true, true,true, 5);
+    RETURN(21, "/return", "↩", false, true, true,true, 5);
 
     private final int order;
     private final String title;
@@ -162,7 +162,7 @@ public enum Command {
                             sorted(Comparator.comparingInt(Command::getOrder)).
                             map(Command::getTitle).
                             collect(Collectors.toList()));
-        } else if (forOwner) {
+        } else if (!forVolunteer) {
             return Pair.of(
                     Stream.of(
                                     Command.values()).
