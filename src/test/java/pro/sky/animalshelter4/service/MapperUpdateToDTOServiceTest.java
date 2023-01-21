@@ -10,7 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.animalshelter4.Generator;
 import pro.sky.animalshelter4.model.Command;
 import pro.sky.animalshelter4.model.InteractionUnit;
-import pro.sky.animalshelter4.model.UpdateDTO;
+import pro.sky.animalshelter4.recordDTO.UpdateDTO;
+import pro.sky.animalshelter4.service.mapperService.MapperUpdateToDTOService;
 
 import java.util.stream.Stream;
 
@@ -18,15 +19,15 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
-class MapperServiceTest {
+class MapperUpdateToDTOServiceTest {
     private static final Generator GENERATOR = new Generator();
-    private final MapperService mapperService = new MapperService(telegramBot);
+    private final MapperUpdateToDTOService mapperUpdateToDTOService = new MapperUpdateToDTOService();
 
     @ParameterizedTest
     @MethodSource("paramForToDPO")
     void toDPO(Update updateTdo, UpdateDTO updateDTO) {
         UpdateDTO actual = updateDTO;
-        UpdateDTO expected = mapperService.toDTO(updateTdo);
+        UpdateDTO expected = mapperUpdateToDTOService.toDTO(updateTdo);
 
         if (actual != null) {
             assertThat(actual.getMessage()).isEqualTo(expected.getMessage());
@@ -52,9 +53,11 @@ class MapperServiceTest {
                                 false),
                         new UpdateDTO(
                                 50L,
+                                "123",
                                 "456",
                                 Command.START,
-                                "",
+                                Command.INFO.getTitle(),
+                                null,
                                 null,
                                 InteractionUnit.COMMAND
                         )
@@ -70,9 +73,11 @@ class MapperServiceTest {
                                 false),
                         new UpdateDTO(
                                 50L,
-                                "456",
+                                "123",
+                                "",
                                 Command.START,
-                                "fsfdsfs",
+                                Command.INFO.getTitle(),
+                                null,
                                 null,
                                 InteractionUnit.COMMAND
                         )
@@ -89,8 +94,10 @@ class MapperServiceTest {
                         new UpdateDTO(
                                 50L,
                                 "123",
+                                "",
                                 Command.START,
-                                "fsfdsfs sdfsdf sdf s",
+                                Command.INFO.getTitle(),
+                                null,
                                 null,
                                 InteractionUnit.COMMAND
                         )
@@ -107,8 +114,10 @@ class MapperServiceTest {
                         new UpdateDTO(
                                 50L,
                                 "123",
+                                "",
                                 Command.START,
                                 Command.INFO.getTitle(),
+                                null,
                                 null,
                                 InteractionUnit.COMMAND
                         )
@@ -135,9 +144,11 @@ class MapperServiceTest {
                                 false),
                         new UpdateDTO(
                                 50L,
-                                "456",
+                                "123",
+                                "",
+                                Command.START,
+                                Command.INFO.getTitle(),
                                 null,
-                                "/sagfasd",
                                 null,
                                 InteractionUnit.COMMAND
                         )

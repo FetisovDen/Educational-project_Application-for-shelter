@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
-import pro.sky.animalshelter4.entity.Chat;
+import pro.sky.animalshelter4.entity.chatEntity.Chat;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -60,18 +60,19 @@ public class Generator {
         return chat;
     }
 
-    public Chat generateChat(Long idChat, String name, String address, String phone, boolean isVolunteer, boolean needGenerate) {
+    public Chat generateChat(Long idChat, String name, String telegramName, String phone,boolean isOwner, boolean isVolunteer, boolean needGenerate) {
         if (needGenerate) {
             idChat = generateIdIfEmpty(idChat);
             name = generateNameIfEmpty(name);
-            address = generateAddressIfEmpty(address);
+            telegramName = generateNameIfEmpty(telegramName);
             phone = generatePhoneIfEmpty(phone);
         }
         Chat chat = new Chat();
         chat.setId(idChat);
         chat.setName(name);
-        chat.setTelegramName(phone);
-        chat.setPhone(address);
+        chat.setTelegramName(telegramName);
+        chat.setPhone(phone);
+        chat.setOwner(isOwner);
         chat.setVolunteer(isVolunteer);
         return chat;
     }

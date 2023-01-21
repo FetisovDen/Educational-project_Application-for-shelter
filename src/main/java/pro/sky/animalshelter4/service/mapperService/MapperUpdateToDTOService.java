@@ -1,6 +1,5 @@
-package pro.sky.animalshelter4.service;
+package pro.sky.animalshelter4.service.mapperService;
 
-import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 
@@ -9,17 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pro.sky.animalshelter4.model.Command;
 import pro.sky.animalshelter4.model.InteractionUnit;
-import pro.sky.animalshelter4.model.UpdateDTO;
+import pro.sky.animalshelter4.recordDTO.UpdateDTO;
+import pro.sky.animalshelter4.service.tgBotService.TelegramBotSenderService;
 
 @Service
-public class MapperService {
-    private final TelegramBot telegramBot;
-    private final Logger logger = LoggerFactory.getLogger(MapperService.class);
-
-    public MapperService(TelegramBot telegramBot) {
-        this.telegramBot = telegramBot;
-    }
-
+public class MapperUpdateToDTOService {
+    private final Logger logger = LoggerFactory.getLogger(MapperUpdateToDTOService.class);
     public UpdateDTO toDTO(Update update) {
 //update
         if (update == null) {
@@ -48,15 +42,17 @@ public class MapperService {
 //message photo
             if (update.message().photo() != null) {
                 logger.debug("ChatId={}; Method toDTO detected photo in message()", updateDTO.getIdChat());
-                updateDTO.setInteractionUnit(InteractionUnit.PHOTO);
+                updateDTO.setInteractionUnit(InteractionUnit.REPORT_PHOTO_AND_CAPTION);
                 int maxPhotoIndex = update.message().photo().length - 1;
                 if (update.message().photo()[maxPhotoIndex].fileId() != null) {
                     updateDTO.setIdMedia(update.message().photo()[maxPhotoIndex].fileId());
+                    updateDTO.setReportText(update.message().caption());
                 } else {
                     logger.debug("ChatId={}; Method toDTO detected null fileId in photo", updateDTO.getIdChat());
                 }
             }
             if(update.message().sticker() != null){
+                logger.error("Method toDTO detected update.message().sticker()");
                 return null;
             }
 //message text

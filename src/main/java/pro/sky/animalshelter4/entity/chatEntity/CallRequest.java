@@ -1,4 +1,4 @@
-package pro.sky.animalshelter4.entity;
+package pro.sky.animalshelter4.entity.chatEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -1,10 +1,11 @@
-package pro.sky.animalshelter4.service;
+package pro.sky.animalshelter4.service.chatTgService;
 
 import org.springframework.stereotype.Service;
-import pro.sky.animalshelter4.entity.CallRequest;
-import pro.sky.animalshelter4.entity.Chat;
-import pro.sky.animalshelter4.model.UpdateDTO;
-import pro.sky.animalshelter4.repository.CallRequestRepository;
+import pro.sky.animalshelter4.entity.chatEntity.CallRequest;
+import pro.sky.animalshelter4.entity.chatEntity.Chat;
+import pro.sky.animalshelter4.recordDTO.UpdateDTO;
+import pro.sky.animalshelter4.repository.chatRepository.CallRequestRepository;
+import pro.sky.animalshelter4.service.tgBotService.TelegramBotSenderService;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,12 +1,10 @@
-package pro.sky.animalshelter4.service;
+package pro.sky.animalshelter4.service.chatTgService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import pro.sky.animalshelter4.entity.Chat;
-import pro.sky.animalshelter4.repository.ChatRepository;
-
-import java.util.List;
+import pro.sky.animalshelter4.entity.chatEntity.Chat;
+import pro.sky.animalshelter4.repository.chatRepository.ChatRepository;
 
 @Service
 public class ChatService {

@@ -35,7 +35,7 @@ public enum Command {
     //stage 1 ( меню команд развилки на инфо о самом приюте и на инфо о том, как взять животное из приюта)
     INFO(3, "/info", "О нас", false, true, true,true, 1),
     HOW(4, "/how", "Как взять питомца?", false, true, true,true, 1),
-    REPORT(5, "/report", "Прислать отчет о питомце", false, false, true,true, 1),
+    REPORT(5, "/report_stage1", "Прислать отчет о питомце", false, false, true,true, 1),
 
     //stage 2 ( меню команд инфо о самом приюте)
     SCHEDULE_ADDRESS(6, "/schedule", "График работы и адрес", false, true, true,true, 2),
@@ -52,14 +52,14 @@ public enum Command {
     REASONS_FOR_REFUSAL(15, "/refusal", "Причины отказа", false, true, true,true, 3),
     CYTOLOGIST_FIRST(16, "/cytologistFirst", "Советы кинолога на начальном этапе знакомства с собакой", false, true, true,true, 3),
     CYTOLOGIST_CONTACTS(17, "/cytologistContacts", "Контакты кинологов", false, true, true,true, 3),
-    //stage 4 (меню команд отчетов)
-
+    //stage 4 (меню команд отчетов(Только для "isOwner"))
+    FORM(18, "/form_report", "Форма отчета", false, false, true,true, 4),
 
     //stage 5 (команды которые появляются на разных уровнях, в завсимости от прочих условий. Регулируются в методе Command.regulatingCommands;)
-    LEAVE_NUMBER(18, "/phone", "Оставить номер", false, true, true,true, 5),
-    CALL_REQUEST(19, "/CALL_REQUEST", "Позвать волонтера", false, true, false,true, 5),
-    CALL_CLIENT(20, "/CALL_CLIENT", "Связаться с клиентом", false, false, true,false, 5),
-    RETURN(21, "/return", "↩", false, true, true,true, 5);
+    LEAVE_NUMBER(19, "/phone", "Оставить номер", false, true, true,true, 5),
+    CALL_REQUEST(20, "/CALL_REQUEST", "Позвать волонтера", false, true, false,true, 5),
+    CALL_CLIENT(21, "/CALL_CLIENT", "Связаться с клиентом", false, false, true,false, 5),
+    RETURN(22, "/return", "↩", false, true, true,true, 5);
 
     private final int order;
     private final String title;

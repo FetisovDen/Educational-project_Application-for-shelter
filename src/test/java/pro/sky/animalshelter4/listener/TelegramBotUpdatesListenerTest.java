@@ -16,14 +16,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Profile;
 import pro.sky.animalshelter4.Generator;
-import pro.sky.animalshelter4.entity.CallRequest;
+import pro.sky.animalshelter4.entity.chatEntity.CallRequest;
 import pro.sky.animalshelter4.info.infoShelter.InfoDogShelterImpl;
 import pro.sky.animalshelter4.info.infoShelter.InfoShelter;
 import pro.sky.animalshelter4.model.Command;
-import pro.sky.animalshelter4.entity.Chat;
-import pro.sky.animalshelter4.repository.CallRequestRepository;
-import pro.sky.animalshelter4.repository.ChatRepository;
-import pro.sky.animalshelter4.service.*;
+import pro.sky.animalshelter4.entity.chatEntity.Chat;
+import pro.sky.animalshelter4.repository.chatRepository.CallRequestRepository;
+import pro.sky.animalshelter4.repository.chatRepository.ChatRepository;
+import pro.sky.animalshelter4.service.chatTgService.CallRequestService;
+import pro.sky.animalshelter4.service.chatTgService.ChatService;
+import pro.sky.animalshelter4.service.mapperService.MapperUpdateToDTOService;
+import pro.sky.animalshelter4.service.ownerServise.CatOwnerService;
+import pro.sky.animalshelter4.service.reportService.ReportCatOwnerService;
+import pro.sky.animalshelter4.service.reportService.TelegramBotContentSaver;
+import pro.sky.animalshelter4.service.tgBotService.TelegramBotSenderService;
+import pro.sky.animalshelter4.service.tgBotService.TelegramBotUpdatesService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -48,10 +55,19 @@ class TelegramBotUpdatesListenerTest {
     @Autowired
     private CallRequestService callRequestService;
     @Autowired
-    private MapperService mapperService;
+    private CatOwnerService catOwnerService;
     @Autowired
     private TelegramBotSenderService telegramBotSenderService;
-    private TelegramBotContentSaver telegramBotContentSaver = new TelegramBotContentSaver("./materials", telegramBotSenderService, telegramBot);
+    @Autowired
+    private MapperUpdateToDTOService mapperUpdateToDTOService;
+    @Autowired
+    private ReportCatOwnerService reportCatOwnerService;
+    private TelegramBotContentSaver telegramBotContentSaver = new TelegramBotContentSaver(
+            "./materials/report",
+            telegramBotSenderService,
+            telegramBot,
+            catOwnerService,
+            reportCatOwnerService);
     @Autowired
     private TelegramBotUpdatesService telegramBotUpdatesService;
     @Autowired
@@ -66,10 +82,10 @@ class TelegramBotUpdatesListenerTest {
         chatRepository.deleteAll();
 
         for (int i = 0; i < 1; i++) {
-            Chat chatVolunteer = generator.generateChat(-1L, "", "", "", true, true);
+            Chat chatVolunteer = generator.generateChat(-1L, "", "","" ,false, true, true);
             chatRepository.save(chatVolunteer);
             for (int j = 0; j < 10; j++) {
-                Chat chatClient = generator.generateChat(-1L, "", "", "", false, true);
+                Chat chatClient = generator.generateChat(-1L, "", "", "",false, false, true);
                 chatRepository.save(chatClient);
                 CallRequest callRequest = new CallRequest();
                 callRequest.setChatVolunteer(chatVolunteer);
@@ -95,7 +111,7 @@ class TelegramBotUpdatesListenerTest {
         assertThat(chatService).isNotNull();
         assertThat(callRequestRepository).isNotNull();
         assertThat(callRequestService).isNotNull();
-        assertThat(mapperService).isNotNull();
+        assertThat(mapperUpdateToDTOService).isNotNull();
         assertThat(telegramBotSenderService).isNotNull();
         assertThat(telegramBotContentSaver).isNotNull();
         assertThat(telegramBotUpdatesService).isNotNull();
@@ -244,7 +260,7 @@ class TelegramBotUpdatesListenerTest {
         List<Update> updateList = new ArrayList<>(List.of(
                 generator.generateUpdateCallbackQueryWithReflection("", name1, "", id1, command, false),
                 generator.generateUpdateCallbackQueryWithReflection("", name2, "", id2, command, false)));
-        Chat chatExist = generator.generateChat(id1, name1, address1, phone1, false, false);
+        Chat chatExist = generator.generateChat(id1, name1, address1, phone1, false,false, false);
         chatRepository.save(chatExist);
         Chat chatVolunteer = chatService.getChatOfVolunteer();
 

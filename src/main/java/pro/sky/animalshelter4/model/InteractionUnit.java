@@ -3,7 +3,7 @@ package pro.sky.animalshelter4.model;
 public enum InteractionUnit {
     MESSAGE,
     COMMAND,
-    PHOTO,
+    REPORT_PHOTO_AND_CAPTION,
     CALLBACK_QUERY;
 
     InteractionUnit() {

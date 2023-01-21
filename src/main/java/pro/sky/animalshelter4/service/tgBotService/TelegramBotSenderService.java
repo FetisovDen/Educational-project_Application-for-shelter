@@ -1,4 +1,4 @@
-package pro.sky.animalshelter4.service;
+package pro.sky.animalshelter4.service.tgBotService;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 
+import pro.sky.animalshelter4.info.infoReport.InfoReport;
 import pro.sky.animalshelter4.info.infoShelter.InfoCatShelterImpl;
 import pro.sky.animalshelter4.info.infoShelter.InfoDogShelterImpl;
 import pro.sky.animalshelter4.info.infoShelter.InfoShelter;
 import pro.sky.animalshelter4.model.Command;
+import pro.sky.animalshelter4.service.chatTgService.ChatService;
 
 
 import java.io.IOException;
@@ -33,6 +35,7 @@ public class TelegramBotSenderService {
     public static final String MESSAGE_SORRY_I_KNOW_THIS = "Прошу прощения.\n Я знаю только данные команды:\n";
     public static final String MESSAGE_HELLO = "Привет, ";
     public static final String DEFAULT_MESSAGE_WITHOUT_CHOOSING_SHELTER = "Необходимо выбрать приют ";
+    public static final String REPORT_WITHOUT_TEXT = "Для отчета необходимо добавить текст";
 
 
     private final Logger logger = LoggerFactory.getLogger(TelegramBotSenderService.class);
@@ -181,6 +184,21 @@ public class TelegramBotSenderService {
         }
     }
 
+    public void sendReportForm(Long idChat) {
+        logger.info("ChatId={}; Method sendReportForm was started for send report form", idChat);
+        sendMessage(idChat, InfoReport.reportForm());
+    }
+
+    public void sendAddText(Long idChat) {
+        logger.info("ChatId={}; Method sendAddText was started for send report form", idChat);
+        sendMessage(idChat, REPORT_WITHOUT_TEXT);
+        sendMessage(idChat, InfoReport.reportForm());
+    }
+    public void successfulReportMessage(Long idChat) {
+        logger.info("ChatId={}; Method successfulReportMessage was started", idChat);
+        sendMessage(idChat, "Отчет успешно отправлен на проверку.");
+    }
+
     public void sendButtonsCommandForChat(Long idChat, int stage, String choosingShelter) {
         logger.info("ChatId={}; Method sendListCommandForChat was started for send list of command", idChat);
         boolean isVolunteer = chatService.isVolunteer(idChat);
@@ -232,9 +250,9 @@ public class TelegramBotSenderService {
             List<String> nameButtons,
             List<String> dataButtons,
             int width, int height) {
-        logger.info("ChatId={}; Method sendButtonsWithDifferentData was started for send buttons", idChat);
+        logger.info("ChatId={}; Method createKeyboard was started for send buttons", idChat);
         if (nameButtons.size() != dataButtons.size()) {
-            logger.debug("ChatId={}; Method sendButtonsWithDifferentData detect different size of Lists", idChat);
+            logger.debug("ChatId={}; Method createKeyboard detect different size of Lists", idChat);
             return;
         }
         InlineKeyboardButton[][] tableButtons = new InlineKeyboardButton[height][width];
@@ -255,11 +273,11 @@ public class TelegramBotSenderService {
         SendMessage message = new SendMessage(idChat, caption).replyMarkup(inlineKeyboardMarkup);
         SendResponse response = telegramBot.execute(message);
         if (response == null) {
-            logger.debug("ChatId={}; Method sendButtonsWithDifferentData did not receive a response", idChat);
+            logger.debug("ChatId={}; Method createKeyboard did not receive a response", idChat);
         } else if (response.isOk()) {
-            logger.debug("ChatId={}; Method sendButtonsWithDifferentData has completed sending the message", idChat);
+            logger.debug("ChatId={}; Method createKeyboard has completed sending the message", idChat);
         } else {
-            logger.debug("ChatId={}; Method sendButtonsWithDifferentData received an error : {}",
+            logger.debug("ChatId={}; Method createKeyboard received an error : {}",
                     idChat, response.errorCode());
         }
     }
@@ -270,5 +288,6 @@ public class TelegramBotSenderService {
         SendPhoto sendPhoto = new SendPhoto(idChat, file);
         telegramBot.execute(sendPhoto).message();
     }
+
 }
 

@@ -6,7 +6,7 @@ import com.pengrad.telegrambot.model.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import pro.sky.animalshelter4.service.TelegramBotUpdatesService;
+import pro.sky.animalshelter4.service.tgBotService.TelegramBotUpdatesService;
 
 import javax.annotation.PostConstruct;
 import java.util.List;

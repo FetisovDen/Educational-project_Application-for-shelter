@@ -1,14 +1,19 @@
-package pro.sky.animalshelter4.entity;
+package pro.sky.animalshelter4.entity.chatEntity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-
 @Entity(name = "chat")
 public class Chat {
     @Id
     private Long id;
+
     private String name;
+
     private String telegramName;
+
     private String phone;
+
     boolean isVolunteer;
     boolean isOwner;
 

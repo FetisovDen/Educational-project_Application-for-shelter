@@ -1,9 +1,8 @@
-package pro.sky.animalshelter4.repository;
+package pro.sky.animalshelter4.repository.chatRepository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import pro.sky.animalshelter4.entity.CallRequest;
-import pro.sky.animalshelter4.entity.Chat;
+import pro.sky.animalshelter4.entity.chatEntity.CallRequest;
 
 import java.util.List;
 
