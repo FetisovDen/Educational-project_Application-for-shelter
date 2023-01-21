@@ -62,7 +62,7 @@ public class TelegramBotUpdatesService {
                         choosingShelter = null;
                         System.out.println("Detected enter : " +
                                 updateDTO.getIdChat() + " / " + updateDTO.getUserName());
-                        telegramBotSenderService.sendStartButtons(updateDTO.getIdChat(), updateDTO.getUserName(), 0,choosingShelter);
+                        telegramBotSenderService.sendStartButtons(updateDTO.getIdChat(), updateDTO.getName(), 0,choosingShelter);
                         break;
                     case CAT_SHELTER:
                         choosingShelter = "cat";
@@ -136,7 +136,7 @@ public class TelegramBotUpdatesService {
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 5,choosingShelter);
                         break;
                     case CALL_REQUEST:
-                        callRequestService.process(updateDTO);
+                        callRequestService.process(updateDTO, choosingShelter);
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 5,choosingShelter);
                         break;
                     case RETURN:

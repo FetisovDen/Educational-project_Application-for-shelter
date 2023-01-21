@@ -63,9 +63,9 @@ public class TelegramBotSenderService {
         sendMessage(idChat, MESSAGE_SORRY_I_DONT_KNOW_COMMAND);
     }
 
-    public void sendStartButtons(Long idChat, String userName, int stage, String choosingShelter) {
+    public void sendStartButtons(Long idChat, String name, int stage, String choosingShelter) {
         logger.info("ChatId={}; Method sendStartButtons was started for send a welcome message", idChat);
-        sendMessage(idChat, MESSAGE_HELLO + userName + ".\n");
+        sendMessage(idChat, MESSAGE_HELLO + name + ".\n");
         sendButtonsCommandForChat(idChat, stage, choosingShelter);
     }
 

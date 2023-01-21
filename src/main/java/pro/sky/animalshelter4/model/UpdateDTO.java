@@ -8,6 +8,7 @@ import java.util.Objects;
 @Component
 public class UpdateDTO {
     private Long idChat;
+    private String name;
     private String userName;
     private Command command;
     private String message;
@@ -17,8 +18,9 @@ public class UpdateDTO {
     public UpdateDTO() {
     }
 
-    public UpdateDTO(Long idChat, String userName, Command command, String message, String idMedia, InteractionUnit interactionUnit) {
+    public UpdateDTO(Long idChat, String name, String userName, Command command, String message, String idMedia, InteractionUnit interactionUnit) {
         this.idChat = idChat;
+        this.name = name;
         this.userName = userName;
         this.command = command;
         this.message = message;
@@ -74,16 +76,24 @@ public class UpdateDTO {
         this.interactionUnit = interactionUnit;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof UpdateDTO)) return false;
         UpdateDTO updateDTO = (UpdateDTO) o;
-        return idChat.equals(updateDTO.idChat) && userName.equals(updateDTO.userName) && command == updateDTO.command && Objects.equals(message, updateDTO.message) && Objects.equals(idMedia, updateDTO.idMedia) && interactionUnit == updateDTO.interactionUnit;
+        return Objects.equals(getIdChat(), updateDTO.getIdChat()) && Objects.equals(getName(), updateDTO.getName()) && Objects.equals(getUserName(), updateDTO.getUserName()) && getCommand() == updateDTO.getCommand() && Objects.equals(getMessage(), updateDTO.getMessage()) && Objects.equals(getIdMedia(), updateDTO.getIdMedia()) && getInteractionUnit() == updateDTO.getInteractionUnit();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idChat, userName, command, message, idMedia, interactionUnit);
+        return Objects.hash(getIdChat(), getName(), getUserName(), getCommand(), getMessage(), getIdMedia(), getInteractionUnit());
     }
 }
