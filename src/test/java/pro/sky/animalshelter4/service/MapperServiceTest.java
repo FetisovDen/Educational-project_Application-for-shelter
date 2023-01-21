@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 @ExtendWith(MockitoExtension.class)
 class MapperServiceTest {
     private static final Generator GENERATOR = new Generator();
-    private final MapperService mapperService = new MapperService(telegramBot);
+    private final MapperService mapperService = new MapperService();
 
     @ParameterizedTest
     @MethodSource("paramForToDPO")

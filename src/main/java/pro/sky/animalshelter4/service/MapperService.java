@@ -1,9 +1,7 @@
 package pro.sky.animalshelter4.service;
 
-import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,12 +11,8 @@ import pro.sky.animalshelter4.model.UpdateDTO;
 
 @Service
 public class MapperService {
-    private final TelegramBot telegramBot;
-    private final Logger logger = LoggerFactory.getLogger(MapperService.class);
 
-    public MapperService(TelegramBot telegramBot) {
-        this.telegramBot = telegramBot;
-    }
+    private final Logger logger = LoggerFactory.getLogger(MapperService.class);
 
     public UpdateDTO toDTO(Update update) {
 //update
@@ -38,8 +32,7 @@ public class MapperService {
                     return null;
                 }
                 updateDTO.setIdChat(update.message().from().id());
-                updateDTO.setName(toUserName(update.message().from()));
-                updateDTO.setUserName(update.message().from().username());
+                updateDTO.setUserName(toUserName(update.message().from()));
                 logger.debug("ChatId={}; Method toDTO detected idChat", updateDTO.getIdChat());
             } else {
                 logger.error("Method toDTO detected null user in update.message()");
@@ -55,9 +48,6 @@ public class MapperService {
                 } else {
                     logger.debug("ChatId={}; Method toDTO detected null fileId in photo", updateDTO.getIdChat());
                 }
-            }
-            if(update.message().sticker() != null){
-                return null;
             }
 //message text
             if (update.message().text() != null) {
@@ -77,8 +67,7 @@ public class MapperService {
                     return null;
                 }
                 updateDTO.setIdChat(update.callbackQuery().from().id());
-                updateDTO.setName(toUserName(update.callbackQuery().from()));
-                updateDTO.setUserName(update.callbackQuery().from().username());
+                updateDTO.setUserName(toUserName(update.callbackQuery().from()));
                 logger.debug("ChatId={}; Method toDTO detected idChat", updateDTO.getIdChat());
             } else {
                 logger.error("Method toDTO detected null user in update.callbackQuery()");

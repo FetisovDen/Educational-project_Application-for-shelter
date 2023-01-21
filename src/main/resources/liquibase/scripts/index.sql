@@ -7,8 +7,8 @@ CREATE TABLE chat
 (
     id           BIGINT PRIMARY KEY generated always as identity,
     name         TEXT NOT NULL,
-    telegram_name TEXT NOT NULL,
     phone        VARCHAR(15),
+    address      TEXT,
     is_volunteer BOOLEAN DEFAULT FALSE
 );
 

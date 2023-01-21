@@ -56,7 +56,7 @@ public class Generator {
             chat.setName(generateNameIfEmpty(update.callbackQuery().from().firstName()));
         }
         chat.setVolunteer(false);
-        chat.setTelegramName(generatePhoneIfEmpty(""));
+        chat.setPhone(generatePhoneIfEmpty(""));
         return chat;
     }
 
@@ -70,8 +70,8 @@ public class Generator {
         Chat chat = new Chat();
         chat.setId(idChat);
         chat.setName(name);
-        chat.setTelegramName(phone);
-        chat.setPhone(address);
+        chat.setPhone(phone);
+        chat.setAddress(address);
         chat.setVolunteer(isVolunteer);
         return chat;
     }

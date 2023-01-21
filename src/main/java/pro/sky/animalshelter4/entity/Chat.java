@@ -7,8 +7,8 @@ public class Chat {
     @Id
     private Long id;
     private String name;
-    private String telegramName;
     private String phone;
+    private String address;
     boolean isVolunteer;
     boolean isOwner;
 
@@ -39,20 +39,20 @@ public class Chat {
         this.name = name;
     }
 
-    public String getTelegramName() {
-        return telegramName;
-    }
-
-    public void setTelegramName(String phone) {
-        this.telegramName = phone;
-    }
-
     public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String address) {
-        this.phone = address;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public boolean isOwner() {
