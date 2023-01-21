@@ -27,7 +27,7 @@ public interface InfoShelter {
     }
 
     default String leaveNumber() {
-        return "Чтобы мы могли связаться с вами, просим вас отсавить свой номер в формате: +7**********.";
+        return "Для связи с вами, просим вас отсавить свой номер в формате: +7**********.";
     }
     String datingRules();
     default String docsForTaking() {
