@@ -7,99 +7,99 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pro.sky.animalshelter4.model.Command;
 import pro.sky.animalshelter4.model.InteractionUnit;
-import pro.sky.animalshelter4.model.UpdateDPO;
+import pro.sky.animalshelter4.model.UpdateDTO;
 
 @Service
 public class MapperService {
 
     private final Logger logger = LoggerFactory.getLogger(MapperService.class);
 
-    public UpdateDPO toDPO(Update update) {
+    public UpdateDTO toDTO(Update update) {
 //update
         if (update == null) {
-            logger.debug("Method toDPO detected null update");
+            logger.debug("Method toDTO detected null update");
             return null;
         }
-        UpdateDPO updateDpo = new UpdateDPO();
+        UpdateDTO updateDTO = new UpdateDTO();
 //message!=null
         if (update.message() != null) {
-            logger.debug("Method toDPO detected message into update");
+            logger.debug("Method toDTO detected message into update");
 //message from
             if (update.message().from() != null &&
                     update.message().from().id() != null) {
                 if (update.message().from().id() < 0) {
-                    logger.error("Method toDPO detected userId < 0");
+                    logger.error("Method toDTO detected userId < 0");
                     return null;
                 }
-                updateDpo.setIdChat(update.message().from().id());
-                updateDpo.setUserName(toUserName(update.message().from()));
-                logger.debug("ChatId={}; Method toDPO detected idChat", updateDpo.getIdChat());
+                updateDTO.setIdChat(update.message().from().id());
+                updateDTO.setUserName(toUserName(update.message().from()));
+                logger.debug("ChatId={}; Method toDTO detected idChat", updateDTO.getIdChat());
             } else {
-                logger.error("Method toDPO detected null user in update.message()");
+                logger.error("Method toDTO detected null user in update.message()");
                 return null;
             }
 //message photo
             if (update.message().photo() != null) {
-                logger.debug("ChatId={}; Method toDPO detected photo in message()", updateDpo.getIdChat());
-                updateDpo.setInteractionUnit(InteractionUnit.PHOTO);
+                logger.debug("ChatId={}; Method toDTO detected photo in message()", updateDTO.getIdChat());
+                updateDTO.setInteractionUnit(InteractionUnit.PHOTO);
                 int maxPhotoIndex = update.message().photo().length - 1;
                 if (update.message().photo()[maxPhotoIndex].fileId() != null) {
-                    updateDpo.setIdMedia(update.message().photo()[maxPhotoIndex].fileId());
+                    updateDTO.setIdMedia(update.message().photo()[maxPhotoIndex].fileId());
                 } else {
-                    logger.debug("ChatId={}; Method toDPO detected null fileId in photo", updateDpo.getIdChat());
+                    logger.debug("ChatId={}; Method toDTO detected null fileId in photo", updateDTO.getIdChat());
                 }
             }
 //message text
             if (update.message().text() != null) {
-                logger.debug("ChatId={}; Method toDPO detected text in message()", updateDpo.getIdChat());
-                updateDpo.setInteractionUnit(InteractionUnit.MESSAGE);
-                updateDpo.setMessage(update.message().text().trim());
+                logger.debug("ChatId={}; Method toDTO detected text in message()", updateDTO.getIdChat());
+                updateDTO.setInteractionUnit(InteractionUnit.MESSAGE);
+                updateDTO.setMessage(update.message().text().trim());
 //callbackQuery!=null
             }
         } else if (update.callbackQuery() != null) {
-            logger.debug("Method toDPO detected callbackQuery into update");
-            updateDpo.setInteractionUnit(InteractionUnit.CALLBACK_QUERY);
+            logger.debug("Method toDTO detected callbackQuery into update");
+            updateDTO.setInteractionUnit(InteractionUnit.CALLBACK_QUERY);
 //callbackQuery from
             if (update.callbackQuery().from() != null &&
                     update.callbackQuery().from().id() != null) {
                 if (update.callbackQuery().from().id() < 0) {
-                    logger.error("Method toDPO detected userId < 0");
+                    logger.error("Method toDTO detected userId < 0");
                     return null;
                 }
-                updateDpo.setIdChat(update.callbackQuery().from().id());
-                updateDpo.setUserName(toUserName(update.callbackQuery().from()));
-                logger.debug("ChatId={}; Method toDPO detected idChat", updateDpo.getIdChat());
+                updateDTO.setIdChat(update.callbackQuery().from().id());
+                updateDTO.setUserName(toUserName(update.callbackQuery().from()));
+                logger.debug("ChatId={}; Method toDTO detected idChat", updateDTO.getIdChat());
             } else {
-                logger.error("Method toDPO detected null user in update.callbackQuery()");
+                logger.error("Method toDTO detected null user in update.callbackQuery()");
                 return null;
             }
 //callbackQuery data
             if (update.callbackQuery().data() != null) {
-                logger.debug("ChatId={}; Method toDPO detected data in callbackQuery()", updateDpo.getIdChat());
-                updateDpo.setInteractionUnit(InteractionUnit.MESSAGE);
-                updateDpo.setMessage(update.callbackQuery().data().trim());
+                logger.debug("ChatId={}; Method toDPO detected data in callbackQuery()", updateDTO.getIdChat());
+                updateDTO.setInteractionUnit(InteractionUnit.MESSAGE);
+                updateDTO.setMessage(update.callbackQuery().data().trim());
             }
         }
 //updateDpo.Message -> Command
-        if (updateDpo.getMessage() != null && updateDpo.getMessage().startsWith("/")) {
-            updateDpo.setInteractionUnit(InteractionUnit.COMMAND);
-            updateDpo.setCommand(Command.fromString(
-                    toWord(updateDpo.getMessage(), 0)));
-            if (updateDpo.getCommand() != null) {
-                logger.debug("ChatId={}; Method toDPO detected command = {}",
-                        updateDpo.getIdChat(), updateDpo.getCommand().getTitle());
-                if (updateDpo.getCommand().getTitle().trim().length() >= updateDpo.getCommand().getTitle().length()) {
-                    updateDpo.setMessage(updateDpo.getMessage().
+        if (updateDTO.getMessage() != null && updateDTO.getMessage().startsWith("/")) {
+            updateDTO.setInteractionUnit(InteractionUnit.COMMAND);
+            updateDTO.setCommand(Command.fromString(
+                    toWord(updateDTO.getMessage(), 0)));
+            if (updateDTO.getCommand() != null) {
+                logger.debug("ChatId={}; Method toDTO detected command = {}",
+                        updateDTO.getIdChat(), updateDTO.getCommand().getTitle());
+                if (updateDTO.getCommand().getTitle().trim().length() >= updateDTO.getCommand().getTitle().length()) {
+                    updateDTO.setMessage(updateDTO.getMessage().
                             substring(
-                                    updateDpo.getCommand().getTitle().length()).
+                                    updateDTO.getCommand().getTitle().length()).
                             trim());
                 }
             }
         } else {
-            logger.debug("ChatId={}; Method toDPO don't detected command in callbackQuery()", updateDpo.getIdChat());
-            updateDpo.setCommand(null);
+            logger.debug("ChatId={}; Method toDTO don't detected command in callbackQuery()", updateDTO.getIdChat());
+            updateDTO.setCommand(null);
         }
-        return updateDpo;
+        return updateDTO;
     }
 
     private boolean isNotNullOrEmpty(String s) {
