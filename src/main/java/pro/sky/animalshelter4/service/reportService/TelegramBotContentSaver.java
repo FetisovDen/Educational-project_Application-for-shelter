@@ -1,16 +1,16 @@
 package pro.sky.animalshelter4.service.reportService;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.File;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.GetFile;
-import com.pengrad.telegrambot.response.GetFileResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pro.sky.animalshelter4.entity.reportEntity.ReportCatOwnerEntity;
+import pro.sky.animalshelter4.entity.reportEntity.ReportDogOwnerEntity;
 import pro.sky.animalshelter4.service.ownerServise.CatOwnerService;
+import pro.sky.animalshelter4.service.ownerServise.DogOwnerService;
 import pro.sky.animalshelter4.service.tgBotService.TelegramBotSenderService;
 
 import java.io.IOException;
@@ -29,48 +29,53 @@ public class TelegramBotContentSaver {
     private final TelegramBotSenderService telegramBotSenderService;
     private final TelegramBot telegramBot;
     private final CatOwnerService catOwnerService;
-
+    private final DogOwnerService dogOwnerService;
     private final ReportCatOwnerService reportCatOwnerService;
+    private final ReportDogOwnerService reportDogOwnerService;
 
     public TelegramBotContentSaver(@Value("${path.to.materials.folder}") String materialsDir,
                                    TelegramBotSenderService telegramBotSenderService,
                                    TelegramBot telegramBot,
                                    CatOwnerService catOwnerService,
-                                   ReportCatOwnerService reportCatOwnerService
+                                   DogOwnerService dogOwnerService,
+                                   ReportCatOwnerService reportCatOwnerService,
+                                   ReportDogOwnerService reportDogOwnerService
     ) {
         this.materialsDir = materialsDir;
         this.telegramBotSenderService = telegramBotSenderService;
         this.telegramBot = telegramBot;
+        this.reportDogOwnerService = reportDogOwnerService;
+        this.dogOwnerService = dogOwnerService;
         this.catOwnerService = catOwnerService;
         this.reportCatOwnerService = reportCatOwnerService;
     }
 
-    public void savePhoto(Update update, String reportText) throws IOException {
+    public void saveReport(Update update, String reportText) throws IOException {
         logger.debug("method savePhoto started");
         int maxPhotoIndex = update.message().photo().length - 1;
         Long idChat = update.message().chat().id();
-
-        if (checkOwner(idChat)) {
-            if (reportText == null){
+        String checkOwner = checkOwner(idChat);
+        if (checkOwner!=null) {
+            if (reportText == null) {
                 telegramBotSenderService.sendAddText(idChat);
-            }
-            else {
-            logger.debug("ChatId={}; Method savePhoto go to save photo: width = {}, heugh = {}, file size = {}",
-                    idChat,
-                    update.message().photo()[maxPhotoIndex].width(),
-                    update.message().photo()[maxPhotoIndex].height(),
-                    update.message().photo()[maxPhotoIndex].fileSize());
-            GetFile getFile = new GetFile(update.message().photo()[maxPhotoIndex].fileId());
-            String url = telegramBot.getFullFilePath(telegramBot.execute(getFile).file());
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            Path path = Path.of(materialsDir, idChat + "_" + LocalDateTime.now().format(format) + ".jpg");
-            try (InputStream is = new URL(url).openStream()) {
-                byte[] img = is.readAllBytes();
-                Files.createDirectories(path.getParent());
-                Files.write(path, img);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            } else {
+                logger.debug("ChatId={}; Method savePhoto go to save photo: width = {}, heugh = {}, file size = {}",
+                        idChat,
+                        update.message().photo()[maxPhotoIndex].width(),
+                        update.message().photo()[maxPhotoIndex].height(),
+                        update.message().photo()[maxPhotoIndex].fileSize());
+                GetFile getFile = new GetFile(update.message().photo()[maxPhotoIndex].fileId());
+                String url = telegramBot.getFullFilePath(telegramBot.execute(getFile).file());
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                Path path = Path.of(materialsDir, idChat + "_" + LocalDateTime.now().format(format) + ".jpg");
+                try (InputStream is = new URL(url).openStream()) {
+                    byte[] img = is.readAllBytes();
+                    Files.createDirectories(path.getParent());
+                    Files.write(path, img);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                if(checkOwner.equals("cat")){
                 ReportCatOwnerEntity reportCatOwner = new ReportCatOwnerEntity();
                 reportCatOwner.setChatId(idChat);
                 reportCatOwner.setTime(Timestamp.valueOf(LocalDateTime.now()));
@@ -79,20 +84,32 @@ public class TelegramBotContentSaver {
                 reportCatOwner.setFilePath(path.toString());
                 reportCatOwner.setCatOwner(catOwnerService.findCatOwnerById(idChat));
                 reportCatOwnerService.create(reportCatOwner);
-                telegramBotSenderService.successfulReportMessage(idChat);
-
+                telegramBotSenderService.successfulReportMessage(idChat);}
+                else if (checkOwner.equals("dog")){
+                    ReportDogOwnerEntity reportDogOwner = new ReportDogOwnerEntity();
+                    reportDogOwner.setChatId(idChat);
+                    reportDogOwner.setTime(Timestamp.valueOf(LocalDateTime.now()));
+                    reportDogOwner.setCompletedToday(true);
+                    reportDogOwner.setText(reportText);
+                    reportDogOwner.setFilePath(path.toString());
+                    reportDogOwner.setDogOwner(dogOwnerService.findDogOwnerById(idChat));
+                    reportDogOwnerService.create(reportDogOwner);
+                    telegramBotSenderService.successfulReportMessage(idChat);
+                }
             }
         } else {
             telegramBotSenderService.sendSorryIKnowThis(idChat, 0, null);
         }
     }
 
-    public boolean checkOwner(Long idChat) {
+    public String checkOwner(Long idChat) {
         if (catOwnerService.catOwnerFindById(idChat)) {
-            return true;
+            return "cat";
+        } else if (dogOwnerService.dogOwnerFindById(idChat)) {
+            return "dog";
         }
         logger.debug("Method checkOwner == false");
-        return false;
+        return null;
     }
 
 

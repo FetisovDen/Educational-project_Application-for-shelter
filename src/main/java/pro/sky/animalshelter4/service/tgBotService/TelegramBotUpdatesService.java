@@ -46,7 +46,7 @@ public class TelegramBotUpdatesService {
             case REPORT_PHOTO_AND_CAPTION:
                 logger.debug("ChatId={}; Method processUpdate detected photo in message()", updateDTO.getIdChat());
                 try {
-                    telegramBotContentSaver.savePhoto(update,updateDTO.getReportText());
+                    telegramBotContentSaver.saveReport(update,updateDTO.getReportText());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

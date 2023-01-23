@@ -37,10 +37,11 @@ alter table chat
 CREATE TABLE cat_owner
 (
     id                   BIGINT PRIMARY KEY,
-    owner_name           TEXT   NOT NULL,
-    cat_name             TEXT   NOT NULL,
-    day_to_end_reporting BIGINT NOT NULL DEFAULT 30,
-    chat_id              BIGINT NOT NULL REFERENCES chat (id)
+    owner_name           TEXT      NOT NULL,
+    cat_name             TEXT      NOT NULL,
+    start_date           TIMESTAMP NOT NULL,
+    day_to_end_reporting BIGINT    NOT NULL DEFAULT 30,
+    chat_id              BIGINT    NOT NULL REFERENCES chat (id)
 );
 
 --changeset dfetisov:5
@@ -55,10 +56,37 @@ ALTER TABLE chat
 CREATE TABLE report_cat_owner
 (
     id              BIGINT PRIMARY KEY generated always as identity,
-    chat_id         BIGINT NOT NULL,
+    chat_id         BIGINT    NOT NULL,
     time            TIMESTAMP NOT NULL,
     completed_today BOOLEAN DEFAULT FALSE,
     text            TEXT      NOT NULL,
     file_path       TEXT      NOT NULL,
     cat_owner_id    BIGINT    NOT NULL REFERENCES cat_owner (id)
 );
+
+--changeset dfetisov:7
+--precondition-sql-check expectedResult:0 SELECT count(*) FROM pg_tables WHERE tablename='dog_owner'
+--onFail=MARK_RAN
+CREATE TABLE dog_owner
+(
+    id                   BIGINT PRIMARY KEY,
+    owner_name           TEXT      NOT NULL,
+    dog_name             TEXT      NOT NULL,
+    start_date           TIMESTAMP NOT NULL,
+    day_to_end_reporting BIGINT    NOT NULL DEFAULT 30,
+    chat_id              BIGINT    NOT NULL REFERENCES chat (id)
+);
+--changeset dfetisov:8
+--precondition-sql-check expectedResult:0 SELECT count(*) FROM pg_tables WHERE tablename='report_dog_owner'
+--onFail=MARK_RAN
+CREATE TABLE report_dog_owner
+(
+    id              BIGINT PRIMARY KEY generated always as identity,
+    chat_id         BIGINT    NOT NULL,
+    time            TIMESTAMP NOT NULL,
+    completed_today BOOLEAN DEFAULT FALSE,
+    text            TEXT      NOT NULL,
+    file_path       TEXT      NOT NULL,
+    dog_owner_id    BIGINT    NOT NULL REFERENCES dog_owner (id)
+);
+

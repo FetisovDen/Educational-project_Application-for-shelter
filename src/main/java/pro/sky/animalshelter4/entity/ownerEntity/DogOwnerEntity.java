@@ -2,23 +2,26 @@ package pro.sky.animalshelter4.entity.ownerEntity;
 
 import pro.sky.animalshelter4.entity.chatEntity.Chat;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-@Entity(name = "cat_owner")
-public class CatOwnerEntity {
+@Entity(name = "dog_owner")
+public class DogOwnerEntity {
     @Id
     private Long Id;
     private String ownerName;
-    private String catName;
+    private String dogName;
     private Timestamp startDate;
     private Long dayToEndReporting;
     @ManyToOne
     @JoinColumn(name = "chat_id")
     private Chat chatOwner;
 
-    public CatOwnerEntity() {
+    public DogOwnerEntity() {
     }
 
     public Long getId() {
@@ -37,12 +40,12 @@ public class CatOwnerEntity {
         this.ownerName = ownerName;
     }
 
-    public String getCatName() {
-        return catName;
+    public String getDogName() {
+        return dogName;
     }
 
-    public void setCatName(String catName) {
-        this.catName = catName;
+    public void setDogName(String dogName) {
+        this.dogName = dogName;
     }
 
     public Timestamp getStartDate() {
@@ -72,22 +75,22 @@ public class CatOwnerEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CatOwnerEntity)) return false;
-        CatOwnerEntity that = (CatOwnerEntity) o;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getOwnerName(), that.getOwnerName()) && Objects.equals(getCatName(), that.getCatName()) && Objects.equals(getStartDate(), that.getStartDate()) && Objects.equals(getDayToEndReporting(), that.getDayToEndReporting()) && Objects.equals(getChatOwner(), that.getChatOwner());
+        if (!(o instanceof DogOwnerEntity)) return false;
+        DogOwnerEntity that = (DogOwnerEntity) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getOwnerName(), that.getOwnerName()) && Objects.equals(getDogName(), that.getDogName()) && Objects.equals(getStartDate(), that.getStartDate()) && Objects.equals(getDayToEndReporting(), that.getDayToEndReporting()) && Objects.equals(getChatOwner(), that.getChatOwner());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getOwnerName(), getCatName(), getStartDate(), getDayToEndReporting(), getChatOwner());
+        return Objects.hash(getId(), getOwnerName(), getDogName(), getStartDate(), getDayToEndReporting(), getChatOwner());
     }
 
     @Override
     public String toString() {
-        return "CatOwnerEntity{" +
+        return "dogOwnerEntity{" +
                 "Id=" + Id +
                 ", ownerName='" + ownerName + '\'' +
-                ", catName='" + catName + '\'' +
+                ", dogName='" + dogName + '\'' +
                 ", date=" + startDate +
                 ", dayToEndReporting=" + dayToEndReporting +
                 ", chatOwner=" + chatOwner +

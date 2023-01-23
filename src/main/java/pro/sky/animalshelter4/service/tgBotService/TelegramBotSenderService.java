@@ -78,6 +78,90 @@ public class TelegramBotSenderService {
         sendButtonsCommandForChat(idChat, stage, choosingShelter);
     }
 
+    public void sendButtonsCommandForChat(Long idChat, int stage, String choosingShelter) {
+        logger.info("ChatId={}; Method sendListCommandForChat was started for send list of command", idChat);
+        boolean isVolunteer = chatService.isVolunteer(idChat);
+        boolean isOwner = chatService.isOwner(idChat);
+        if (choosingShelter == null) {
+            stage = 0;
+        }
+        Command.regulatingCommands(stage, choosingShelter);
+        List<String> nameList = Command.getPairListsForButtonExcludeHide(isVolunteer, isOwner, stage).getFirst();
+        List<String> dataList = Command.getPairListsForButtonExcludeHide(isVolunteer, isOwner, stage).getSecond();
+        int countButtons = nameList.size();
+        int width = 0;
+        int height = 0;
+
+        if (countButtons == 0) {
+            logger.debug("ChatId={}; Method sendButtonsCommandForChat detected count of command = 0", idChat);
+            return;
+        }
+        if (countButtons == 1) {
+            width = 1;
+            height = 1;
+        } else if (countButtons % 7 == 0) {
+            width = 7;
+            height = countButtons / 7;
+        } else if (countButtons % 5 == 0) {
+            width = 5;
+            height = countButtons / 5;
+        } else if (countButtons % 3 == 0) {
+            width = 3;
+            height = countButtons / 3;
+        } else if (countButtons % 2 == 0) {
+            width = 2;
+            height = countButtons / 2;
+        } else if (countButtons % 9 == 0) {
+            width = 9;
+            height = countButtons / 9;
+        }
+        createKeyboard(
+                idChat,
+                MESSAGE_SELECT_COMMAND,
+                nameList,
+                dataList,
+                width, height);
+    }
+
+
+    public void createKeyboard(
+            Long idChat,
+            String caption,
+            List<String> nameButtons,
+            List<String> dataButtons,
+            int width, int height) {
+        logger.info("ChatId={}; Method createKeyboard was started for send buttons", idChat);
+        if (nameButtons.size() != dataButtons.size()) {
+            logger.debug("ChatId={}; Method createKeyboard detect different size of Lists", idChat);
+            return;
+        }
+        InlineKeyboardButton[][] tableButtons = new InlineKeyboardButton[height][width];
+        int indexLists = 0;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (indexLists < nameButtons.size()) {
+                    tableButtons[i][j] = new InlineKeyboardButton(nameButtons.get(indexLists))
+                            .callbackData(dataButtons.get(indexLists));
+                } else {
+                    tableButtons[i][j] = new InlineKeyboardButton(EMPTY_SYMBOL_FOR_BUTTON)
+                            .callbackData(Command.EMPTY_CALLBACK_DATA_FOR_BUTTON.getTitle());
+                }
+                indexLists++;
+            }
+        }
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(tableButtons);
+        SendMessage message = new SendMessage(idChat, caption).replyMarkup(inlineKeyboardMarkup);
+        SendResponse response = telegramBot.execute(message);
+        if (response == null) {
+            logger.debug("ChatId={}; Method createKeyboard did not receive a response", idChat);
+        } else if (response.isOk()) {
+            logger.debug("ChatId={}; Method createKeyboard has completed sending the message", idChat);
+        } else {
+            logger.debug("ChatId={}; Method createKeyboard received an error : {}",
+                    idChat, response.errorCode());
+        }
+    }
+
     public InfoShelter checkWhatShelter(Long idChat, String choosingShelter) {
         if (choosingShelter == null) {
             logger.info(" Method checkWhatShelter get null and send message in chat about it ");
@@ -194,92 +278,40 @@ public class TelegramBotSenderService {
         sendMessage(idChat, REPORT_WITHOUT_TEXT);
         sendMessage(idChat, InfoReport.reportForm());
     }
+
     public void successfulReportMessage(Long idChat) {
         logger.info("ChatId={}; Method successfulReportMessage was started", idChat);
         sendMessage(idChat, "Отчет успешно отправлен на проверку.");
     }
 
-    public void sendButtonsCommandForChat(Long idChat, int stage, String choosingShelter) {
-        logger.info("ChatId={}; Method sendListCommandForChat was started for send list of command", idChat);
-        boolean isVolunteer = chatService.isVolunteer(idChat);
-        boolean isOwner = chatService.isOwner(idChat);
-        if (choosingShelter == null) {
-            stage = 0;
-        }
-        Command.regulatingCommands(stage, choosingShelter);
-        List<String> nameList = Command.getPairListsForButtonExcludeHide(isVolunteer, isOwner, stage).getFirst();
-        List<String> dataList = Command.getPairListsForButtonExcludeHide(isVolunteer, isOwner, stage).getSecond();
-        int countButtons = nameList.size();
-        int width = 0;
-        int height = 0;
-
-        if (countButtons == 0) {
-            logger.debug("ChatId={}; Method sendButtonsCommandForChat detected count of command = 0", idChat);
-            return;
-        }
-        if (countButtons == 1) {
-            width = 1;
-            height = 1;
-        } else if (countButtons % 7 == 0) {
-            width = 7;
-            height = countButtons / 7;
-        } else if (countButtons % 5 == 0) {
-            width = 5;
-            height = countButtons / 5;
-        } else if (countButtons % 3 == 0) {
-            width = 3;
-            height = countButtons / 3;
-        } else if (countButtons % 2 == 0) {
-            width = 2;
-            height = countButtons / 2;
-        } else if (countButtons % 9 == 0) {
-            width = 9;
-            height = countButtons / 9;
-        }
-        createKeyboard(
-                idChat,
-                MESSAGE_SELECT_COMMAND,
-                nameList,
-                dataList,
-                width, height);
+    public void addDaysForOwner(Long chatId, int days) {
+        logger.info("ChatId={}; Method addDaysForOwner was started", chatId);
+        sendMessage(chatId, "Вам был продлен отчетный период на " + days + " дней");
     }
 
-    public void createKeyboard(
-            Long idChat,
-            String caption,
-            List<String> nameButtons,
-            List<String> dataButtons,
-            int width, int height) {
-        logger.info("ChatId={}; Method createKeyboard was started for send buttons", idChat);
-        if (nameButtons.size() != dataButtons.size()) {
-            logger.debug("ChatId={}; Method createKeyboard detect different size of Lists", idChat);
-            return;
-        }
-        InlineKeyboardButton[][] tableButtons = new InlineKeyboardButton[height][width];
-        int indexLists = 0;
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (indexLists < nameButtons.size()) {
-                    tableButtons[i][j] = new InlineKeyboardButton(nameButtons.get(indexLists))
-                            .callbackData(dataButtons.get(indexLists));
-                } else {
-                    tableButtons[i][j] = new InlineKeyboardButton(EMPTY_SYMBOL_FOR_BUTTON)
-                            .callbackData(Command.EMPTY_CALLBACK_DATA_FOR_BUTTON.getTitle());
-                }
-                indexLists++;
-            }
-        }
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(tableButtons);
-        SendMessage message = new SendMessage(idChat, caption).replyMarkup(inlineKeyboardMarkup);
-        SendResponse response = telegramBot.execute(message);
-        if (response == null) {
-            logger.debug("ChatId={}; Method createKeyboard did not receive a response", idChat);
-        } else if (response.isOk()) {
-            logger.debug("ChatId={}; Method createKeyboard has completed sending the message", idChat);
-        } else {
-            logger.debug("ChatId={}; Method createKeyboard received an error : {}",
-                    idChat, response.errorCode());
-        }
+    public void warnAboutPoorReport(long chatId) {
+        logger.info("ChatId={}; Method warnAboutPoorReport was started", chatId);
+        sendMessage(chatId, InfoReport.warnAboutPoorReport());
+    }
+
+    public void warnAboutRefuse(long chatId) {
+        logger.info("ChatId={}; Method warnAboutRefuse was started", chatId);
+        sendMessage(chatId, InfoReport.warnAboutRefuse());
+    }
+
+    public void warnAboutApproval(long chatId) {
+        logger.info("ChatId={}; Method warnAboutApproval was started", chatId);
+        sendMessage(chatId, InfoReport.warnAboutApproval());
+    }
+
+    public void sendWarnAboutOverdue(Long chatId) {
+        logger.info("ChatId={}; Method sendWarnAboutOverdue was started", chatId);
+        sendMessage(chatId, InfoReport.warnAboutOverdue());
+    }
+
+    public void sendWarnForVolunteersAboutOverdueTwoDay(Long chatId, String listOfOwnerWithOverdue) {
+        logger.info("ChatId={}; Method sendWarnAboutOverdue was started", chatId);
+        sendMessage(chatId, "Данные пользователи не отправляют отчет второй день:\n " + listOfOwnerWithOverdue);
     }
 
     public void sendPhoto(Long idChat, String pathFile) throws IOException {
@@ -288,6 +320,5 @@ public class TelegramBotSenderService {
         SendPhoto sendPhoto = new SendPhoto(idChat, file);
         telegramBot.execute(sendPhoto).message();
     }
-
 }
 

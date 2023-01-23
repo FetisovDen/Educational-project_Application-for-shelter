@@ -2,10 +2,10 @@ package pro.sky.animalshelter4.recordDTO;
 import java.util.Objects;
 
 
-public class CatOwnerRecord {
+public class DogOwnerRecord {
     private Long chatId;
     private String ownerName;
-    private String catName;
+    private String dogName;
     private Long dayToEndReporting;
 
     public Long getChatId() {
@@ -16,12 +16,12 @@ public class CatOwnerRecord {
         this.chatId = chatId;
     }
 
-    public String getCatName() {
-        return catName;
+    public String getDogName() {
+        return dogName;
     }
 
-    public void setCatName(String catName) {
-        this.catName = catName;
+    public void setDogName(String dogName) {
+        this.dogName = dogName;
     }
 
     public Long getDayToEndReporting() {
@@ -43,22 +43,22 @@ public class CatOwnerRecord {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CatOwnerRecord)) return false;
-        CatOwnerRecord that = (CatOwnerRecord) o;
-        return Objects.equals(getChatId(), that.getChatId()) && Objects.equals(getOwnerName(), that.getOwnerName()) && Objects.equals(getCatName(), that.getCatName()) && Objects.equals(getDayToEndReporting(), that.getDayToEndReporting());
+        if (!(o instanceof DogOwnerRecord)) return false;
+        DogOwnerRecord that = (DogOwnerRecord) o;
+        return Objects.equals(getChatId(), that.getChatId()) && Objects.equals(getOwnerName(), that.getOwnerName()) && Objects.equals(getDogName(), that.getDogName()) && Objects.equals(getDayToEndReporting(), that.getDayToEndReporting());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getChatId(), getOwnerName(), getCatName(), getDayToEndReporting());
+        return Objects.hash(getChatId(), getOwnerName(), getDogName(), getDayToEndReporting());
     }
 
     @Override
     public String toString() {
-        return "CatOwnerRecord{" +
+        return "DogOwnerRecord{" +
                 "chatId=" + chatId +
                 ", ownerName='" + ownerName + '\'' +
-                ", catName='" + catName + '\'' +
+                ", dogName='" + dogName + '\'' +
                 ", dayToEndReporting=" + dayToEndReporting +
                 '}';
     }

@@ -4,7 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pro.sky.animalshelter4.entity.chatEntity.Chat;
+import pro.sky.animalshelter4.exception.ChatNotFoundException;
 import pro.sky.animalshelter4.repository.chatRepository.ChatRepository;
+
+import java.util.List;
 
 @Service
 public class ChatService {
@@ -36,22 +39,19 @@ public class ChatService {
     }
 
     public Chat findChat(Long id) {
-        return chatRepository.getChatById(id);
+        return chatRepository.findById(id).orElseThrow(ChatNotFoundException::new);
+    }
+    public Chat findChatByIdWithoutException(Long id){
+       return chatRepository.getChatById(id);
     }
 
     public void deleteChat(Long id) {
-        Chat chat = new Chat();
-        chat.setId(id);
-        deleteChat(chat);
-    }
-
-    public void deleteChat(Chat chat) {
-        chatRepository.delete(chat);
+        chatRepository.delete(findChat(id));
     }
 
     public boolean isVolunteer(Long id) {
         logger.info("Method isVolunteer was start for to check if the chat with id = {} is a volunteer", id);
-        Chat chat = findChat(id);
+        Chat chat = findChatByIdWithoutException(id);
         if (chat == null || !chat.isVolunteer()) {
             logger.debug("Method isVolunteer detected volunteer by idChat = {}", id);
             return false;
@@ -61,7 +61,7 @@ public class ChatService {
     }
     public boolean isOwner(Long id) {
         logger.info("Method isOwner was start for to check if the chat with id = {} is a owner", id);
-        Chat chat = findChat(id);
+        Chat chat = findChatByIdWithoutException(id);
         if (chat == null || !chat.isOwner()) {
             logger.debug("Method isVolunteer detected volunteer by idChat = {}", id);
             return false;
@@ -72,8 +72,14 @@ public class ChatService {
 
     public Chat getChatOfVolunteer() {
         return chatRepository.getChatOfVolunteer();
-//        return null;
     }
 
 
+    public void makeChatIsOwnerTrue(Long chatId) {
+        chatRepository.makeChatIsOwnerTrue(chatId);
+    }
+
+    public List<Chat> findChatByTgName(String telegramName) {
+        return chatRepository.findByTelegramName(telegramName);
+    }
 }

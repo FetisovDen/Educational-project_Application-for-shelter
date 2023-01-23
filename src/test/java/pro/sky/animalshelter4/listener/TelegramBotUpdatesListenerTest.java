@@ -24,10 +24,11 @@ import pro.sky.animalshelter4.entity.chatEntity.Chat;
 import pro.sky.animalshelter4.repository.chatRepository.CallRequestRepository;
 import pro.sky.animalshelter4.repository.chatRepository.ChatRepository;
 import pro.sky.animalshelter4.service.chatTgService.CallRequestService;
-import pro.sky.animalshelter4.service.chatTgService.ChatService;
 import pro.sky.animalshelter4.service.mapperService.MapperUpdateToDTOService;
 import pro.sky.animalshelter4.service.ownerServise.CatOwnerService;
+import pro.sky.animalshelter4.service.ownerServise.DogOwnerService;
 import pro.sky.animalshelter4.service.reportService.ReportCatOwnerService;
+import pro.sky.animalshelter4.service.reportService.ReportDogOwnerService;
 import pro.sky.animalshelter4.service.reportService.TelegramBotContentSaver;
 import pro.sky.animalshelter4.service.tgBotService.TelegramBotSenderService;
 import pro.sky.animalshelter4.service.tgBotService.TelegramBotUpdatesService;
@@ -49,7 +50,7 @@ class TelegramBotUpdatesListenerTest {
     @Autowired
     private ChatRepository chatRepository;
     @Autowired
-    private ChatService chatService;
+    private pro.sky.animalshelter4.service.chatTgService.ChatService chatService;
     @Autowired
     private CallRequestRepository callRequestRepository;
     @Autowired
@@ -57,17 +58,23 @@ class TelegramBotUpdatesListenerTest {
     @Autowired
     private CatOwnerService catOwnerService;
     @Autowired
+    private DogOwnerService dogOwnerService;
+    @Autowired
     private TelegramBotSenderService telegramBotSenderService;
     @Autowired
     private MapperUpdateToDTOService mapperUpdateToDTOService;
     @Autowired
     private ReportCatOwnerService reportCatOwnerService;
+    @Autowired
+    private ReportDogOwnerService reportDogOwnerService;
     private TelegramBotContentSaver telegramBotContentSaver = new TelegramBotContentSaver(
             "./materials/report",
             telegramBotSenderService,
             telegramBot,
             catOwnerService,
-            reportCatOwnerService);
+            dogOwnerService,
+            reportCatOwnerService,
+            reportDogOwnerService);
     @Autowired
     private TelegramBotUpdatesService telegramBotUpdatesService;
     @Autowired
