@@ -46,110 +46,114 @@ public class TelegramBotUpdatesService {
             case REPORT_PHOTO_AND_CAPTION:
                 logger.debug("ChatId={}; Method processUpdate detected photo in message()", updateDTO.getIdChat());
                 try {
-                    telegramBotContentSaver.saveReport(update,updateDTO.getReportText());
+                    telegramBotContentSaver.saveReport(update, updateDTO.getReportText());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
                 return;
             case MESSAGE:
-                telegramBotSenderService.sendSorryIKnowThis(updateDTO.getIdChat(), 0,choosingShelter);
+                if (Character.isDigit(updateDTO.getMessage().charAt(0)) || updateDTO.getMessage().startsWith("+")) {
+                    telegramBotContentSaver.savePhone(updateDTO);
+                } else {
+                    telegramBotSenderService.sendSorryIKnowThis(updateDTO.getIdChat(), 0, choosingShelter);
+                }
                 return;
             case COMMAND:
                 logger.info("ChatId={}; Method processUpdate start process command = {}",
                         updateDTO.getIdChat(), updateDTO.getCommand());
                 if (updateDTO.getCommand() == null) {
                     telegramBotSenderService.sendUnknownProcess(updateDTO.getIdChat());
-                    telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 0,choosingShelter);
+                    telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 0, choosingShelter);
                 } else switch (updateDTO.getCommand()) {
                     case START:
                         choosingShelter = null;
                         System.out.println("Detected enter : " +
                                 updateDTO.getIdChat() + " / " + updateDTO.getUserName());
-                        telegramBotSenderService.sendStartButtons(updateDTO.getIdChat(), updateDTO.getName(), 0,choosingShelter);
+                        telegramBotSenderService.sendStartButtons(updateDTO.getIdChat(), updateDTO.getName(), 0, choosingShelter);
                         break;
                     case CAT_SHELTER:
                         choosingShelter = "cat";
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 1,choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 1, choosingShelter);
                         break;
                     case DOG_SHELTER:
                         choosingShelter = "dog";
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 1,choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 1, choosingShelter);
                         break;
                     case INFO:
-                        telegramBotSenderService.sendInfoAboutShelter(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 2,choosingShelter);
+                        telegramBotSenderService.sendInfoAboutShelter(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 2, choosingShelter);
                         break;
                     case SCHEDULE_ADDRESS:
-                        telegramBotSenderService.sendInfoAboutScheduleAndAddress(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 2,choosingShelter);
+                        telegramBotSenderService.sendInfoAboutScheduleAndAddress(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 2, choosingShelter);
                         break;
                     case CAR_PASS:
-                        telegramBotSenderService.sendInfoAboutCarPass(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 2,choosingShelter);
+                        telegramBotSenderService.sendInfoAboutCarPass(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 2, choosingShelter);
                         break;
                     case SAFETY_REGULATIONS:
-                        telegramBotSenderService.sendInfoAboutSafetyRegulations(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 2,choosingShelter);
+                        telegramBotSenderService.sendInfoAboutSafetyRegulations(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 2, choosingShelter);
                         break;
 
                     case HOW:
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3,choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3, choosingShelter);
                         break;
                     case DATING_RULES:
-                        telegramBotSenderService.sendDogDatingRules(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3,choosingShelter);
+                        telegramBotSenderService.sendDatingRules(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3, choosingShelter);
                         break;
                     case DOCS_FOR_TAKING:
-                        telegramBotSenderService.sendDocsForTaking(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3,choosingShelter);
+                        telegramBotSenderService.sendDocsForTaking(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3, choosingShelter);
                         break;
                     case TRANSPORTATION:
-                        telegramBotSenderService.sendTransportationInfo(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3,choosingShelter);
+                        telegramBotSenderService.sendTransportationInfo(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3, choosingShelter);
                         break;
                     case HOME_EQUIP_FOR_BABY:
-                        telegramBotSenderService.sendHomeEquipForBaby(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3,choosingShelter);
+                        telegramBotSenderService.sendHomeEquipForBaby(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3, choosingShelter);
                         break;
                     case HOME_EQUIP_FOR_ADULT:
-                        telegramBotSenderService.sendHomeEquipForAdult(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3,choosingShelter);
+                        telegramBotSenderService.sendHomeEquipForAdult(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3, choosingShelter);
                         break;
                     case HOME_EQUIP_FOR_PET_WITH_DISABILITIES:
-                        telegramBotSenderService.sendHomeEquipForPetWithDisabilities(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3,choosingShelter);
+                        telegramBotSenderService.sendHomeEquipForPetWithDisabilities(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3, choosingShelter);
                         break;
                     case CYTOLOGIST_FIRST:
                         telegramBotSenderService.sendCytologistFirst(updateDTO.getIdChat());
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3,choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3, choosingShelter);
                         break;
                     case CYTOLOGIST_CONTACTS:
                         telegramBotSenderService.sendCytologistContacts(updateDTO.getIdChat());
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3,choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3, choosingShelter);
                         break;
                     case REASONS_FOR_REFUSAL:
-                        telegramBotSenderService.sendReasonsForRefusal(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3,choosingShelter);
+                        telegramBotSenderService.sendReasonsForRefusal(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 3, choosingShelter);
                         break;
 
                     case REPORT:
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),4,choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 4, choosingShelter);
                         break;
                     case FORM:
                         telegramBotSenderService.sendReportForm(updateDTO.getIdChat());
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(),4,choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 4, choosingShelter);
                         break;
                     case LEAVE_NUMBER:
-                        telegramBotSenderService.sendInfoAboutLeaveNumber(updateDTO.getIdChat(),choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 5,choosingShelter);
+                        telegramBotSenderService.sendInfoAboutLeaveNumber(updateDTO.getIdChat(), choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 5, choosingShelter);
                         break;
                     case CALL_REQUEST:
                         callRequestService.process(updateDTO, choosingShelter);
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 5,choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 5, choosingShelter);
                         break;
                     case RETURN:
                         choosingShelter = null;
-                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 0,choosingShelter);
+                        telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 0, choosingShelter);
                         break;
                     case EMPTY_CALLBACK_DATA_FOR_BUTTON:
                 }

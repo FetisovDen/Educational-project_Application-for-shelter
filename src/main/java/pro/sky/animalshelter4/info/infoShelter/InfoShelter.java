@@ -27,7 +27,9 @@ public interface InfoShelter {
     }
 
     default String leaveNumber() {
-        return "Для связи с вами, просим вас отсавить свой номер в формате: +7**********.";
+        return "Для связи с вами, просим вас отсавить свой номер в формате: +***********, либо просто 11 цифр.\n"+
+                "Для примера:\n" +
+                "+79097894589 либо 88005553535";
     }
     String datingRules();
     default String docsForTaking() {

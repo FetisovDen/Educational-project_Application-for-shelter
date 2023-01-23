@@ -7,8 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pro.sky.animalshelter4.entity.chatEntity.Chat;
 import pro.sky.animalshelter4.entity.reportEntity.ReportCatOwnerEntity;
 import pro.sky.animalshelter4.entity.reportEntity.ReportDogOwnerEntity;
+import pro.sky.animalshelter4.recordDTO.UpdateDTO;
+import pro.sky.animalshelter4.service.chatTgService.ChatService;
 import pro.sky.animalshelter4.service.ownerServise.CatOwnerService;
 import pro.sky.animalshelter4.service.ownerServise.DogOwnerService;
 import pro.sky.animalshelter4.service.tgBotService.TelegramBotSenderService;
@@ -29,6 +32,8 @@ public class TelegramBotContentSaver {
     private final TelegramBotSenderService telegramBotSenderService;
     private final TelegramBot telegramBot;
     private final CatOwnerService catOwnerService;
+
+    private final ChatService chatService;
     private final DogOwnerService dogOwnerService;
     private final ReportCatOwnerService reportCatOwnerService;
     private final ReportDogOwnerService reportDogOwnerService;
@@ -36,6 +41,7 @@ public class TelegramBotContentSaver {
     public TelegramBotContentSaver(@Value("${path.to.materials.folder}") String materialsDir,
                                    TelegramBotSenderService telegramBotSenderService,
                                    TelegramBot telegramBot,
+                                   ChatService chatService,
                                    CatOwnerService catOwnerService,
                                    DogOwnerService dogOwnerService,
                                    ReportCatOwnerService reportCatOwnerService,
@@ -48,6 +54,7 @@ public class TelegramBotContentSaver {
         this.dogOwnerService = dogOwnerService;
         this.catOwnerService = catOwnerService;
         this.reportCatOwnerService = reportCatOwnerService;
+        this.chatService = chatService;
     }
 
     public void saveReport(Update update, String reportText) throws IOException {
@@ -101,6 +108,22 @@ public class TelegramBotContentSaver {
             telegramBotSenderService.sendSorryIKnowThis(idChat, 0, null);
         }
     }
+
+    public void savePhone(UpdateDTO updateDTO){
+        logger.info("method savePhone started");
+        if(updateDTO.getMessage().matches("^\\+\\d{11}$|^\\d{11}$")){
+            logger.info("method savePhone found phone and save it");
+            Chat chat = chatService.getChatByIdOrNewWithName(updateDTO.getIdChat(), updateDTO.getName(), updateDTO.getUserName());
+            chat.setPhone(updateDTO.getMessage());
+            chatService.addChat(chat);
+            telegramBotSenderService.successfulPhoneSave(chat.getId());
+        } else {
+            logger.info("method savePhone did not find phone");
+            telegramBotSenderService.unSuccessfulPhoneSave(updateDTO.getIdChat());
+        }
+    }
+
+
 
     public String checkOwner(Long idChat) {
         if (catOwnerService.catOwnerFindById(idChat)) {

@@ -209,7 +209,7 @@ public class TelegramBotSenderService {
         }
     }
 
-    public void sendDogDatingRules(Long idChat, String choosingShelter) {
+    public void sendDatingRules(Long idChat, String choosingShelter) {
         if (checkWhatShelter(idChat, choosingShelter) != null) {
             logger.info("ChatId={}; Method sendDogDatingRules was started for send how take a dog", idChat);
             sendMessage(idChat, checkWhatShelter(idChat, choosingShelter).datingRules());
@@ -314,11 +314,26 @@ public class TelegramBotSenderService {
         sendMessage(chatId, "Данные пользователи не отправляют отчет второй день:\n " + listOfOwnerWithOverdue);
     }
 
+    public void successfulPhoneSave(Long chatId) {
+        logger.info("ChatId={}; Method successfulPhoneSave was started", chatId);
+        sendMessage(chatId, "Телефон успешно сохранен, теперь мы можем связаться с вами " +
+                "если вы того пожелаетет, для этого выберите в меню - Позвать волонтера ");
+        sendButtonsCommandForChat(chatId, 5, "cat");
+    }
+    public void unSuccessfulPhoneSave(Long chatId) {
+        logger.info("ChatId={}; Method unSuccessfulPhoneSave was started", chatId);
+        sendMessage(chatId, "Бот не смог разобрать номер, который вы ему отправили," +
+                " просьба соблюдать формат номера для отправки:");
+        sendInfoAboutLeaveNumber(chatId,"cat");
+        sendButtonsCommandForChat(chatId, 0, null);
+    }
+
     public void sendPhoto(Long idChat, String pathFile) throws IOException {
         Path path = Paths.get(pathFile);
         byte[] file = Files.readAllBytes(path);
         SendPhoto sendPhoto = new SendPhoto(idChat, file);
         telegramBot.execute(sendPhoto).message();
     }
+
 }
 
