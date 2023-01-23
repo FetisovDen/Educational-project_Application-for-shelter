@@ -2,7 +2,6 @@ package pro.sky.animalshelter4.service.mapperService;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,11 @@ import pro.sky.animalshelter4.service.tgBotService.TelegramBotSenderService;
 @Service
 public class MapperUpdateToDTOService {
     private final Logger logger = LoggerFactory.getLogger(MapperUpdateToDTOService.class);
+    /**
+     * Обработка обновления, проверка на nullы, наличие команд, сообщений, фото
+     *
+     * @param update полученное обновление
+     */
     public UpdateDTO toDTO(Update update) {
 //update
         if (update == null) {
@@ -108,11 +112,19 @@ public class MapperUpdateToDTOService {
         }
         return updateDTO;
     }
-
+    /**
+     * Проверка строки на наличие содержания (не null и длина больше 0)
+     */
     private boolean isNotNullOrEmpty(String s) {
         return s != null && s.length() > 0;
     }
-
+    /**
+     * Возвращаем слово из строки по индексу.
+     * Если в строке одно слово, метод вернет строку неизменной.
+     * Если индекс выходит за пределы массива слов строки, метод вернет пустую строку.
+     * @param s обрабатываемая строка
+     * @param indexWord индекс слова
+     */
     public String toWord(String s, int indexWord) {
         logger.debug("Method toWord was start for parse from string = {} word # = {}", s, indexWord);
 
@@ -130,6 +142,24 @@ public class MapperUpdateToDTOService {
         logger.debug("Method toWord return {}", sMas[indexWord]);
         return sMas[indexWord];
     }
+    /**
+     * Находим id чата пользователя
+     */
+    public Long toChatId(Update update) {
+        if (update.message() != null &&
+                update.message().from() != null &&
+                update.message().from().id() != null) {
+            return update.message().from().id();
+        } else if (update.callbackQuery() != null &&
+                update.callbackQuery().from() != null &&
+                update.callbackQuery().from().id() != null) {
+            return update.callbackQuery().from().id();
+        }
+        return null;
+    }
+    /**
+     * Находим имя пользователя
+     */
     public String toUserName(User user) {
         String name = "";
         if (isNotNullOrEmpty(user.firstName())) {
