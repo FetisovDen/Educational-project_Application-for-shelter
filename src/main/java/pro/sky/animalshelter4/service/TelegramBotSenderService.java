@@ -52,42 +52,80 @@ public class TelegramBotSenderService {
             logger.debug("ChatId={}; Method sendMessage received an error : {}", idChat, response.errorCode());
         }
     }
-
+    /**
+     * Бот отправляет сообщение о том, что не знает введённой команды
+     *
+     * @param idChat идентификатор чата для определения ботом кому отвечать
+     */
     public void sendUnknownProcess(Long idChat) {
         logger.info("ChatId={}; Method sendUnknownProcess was started for send a message about unknown command",
                 idChat);
         sendMessage(idChat, MESSAGE_SORRY_I_DONT_KNOW_COMMAND);
     }
-
+    /**
+     *Приветствие и отправка списка команд, кот-е обрабатывает бот
+     *
+     * @param idChat идентификатор чата для определения ботом кому отвечать
+     * @param userName для обращения к пользователю по никнейму
+     */
     public void sendStart(Long idChat, String userName) {
         logger.info("ChatId={}; Method sendStart was started for send a welcome message", idChat);
         sendMessage(idChat, "Hello " + userName + ".\n" +
                 "I know some command:\n" + Command.getAllTitlesAsListExcludeHide(chatService.isVolunteer(idChat)));
     }
-
+    /**
+     *Отправка приветственного сообщения и клавиатуры с командами
+     *
+     * @param idChat идентификатор чата для определения ботом кому отвечать
+     * @param userName никнейм пользователя
+     * @param stage
+     */
     public void sendStartButtons(Long idChat, String userName,int stage) {
         logger.info("ChatId={}; Method sendStartButtons was started for send a welcome message", idChat);
         sendMessage(idChat, MESSAGE_HELLO + userName + ".\n");
         sendButtonsCommandForChat(idChat,stage);
     }
-
+    /**
+     *Отправка сообщения со списком команд, которые обрабатывает бот
+     *
+     * @param idChat идентификатор чата для определения ботом кому отвечать
+     * @param stage
+     */
     public void sendSorryIKnowThis(Long idChat,int stage) {
         logger.info("ChatId={}; Method processWhatICan was started for send ability", idChat);
         sendMessage(idChat, MESSAGE_SORRY_I_KNOW_THIS);
         sendButtonsCommandForChat(idChat,stage);
     }
-
+    /**
+     *Отправка информации о приюте для собак
+     *
+     * @param idChat идентификатор чата для определения ботом кому отвечать
+     */
     public void sendInfoAboutShelter(Long idChat) {
         logger.info("ChatId={}; Method sendInfoAboutShelter was started for send info about shelter", idChat);
         sendMessage(idChat, InfoAboutDogShelter.INFO_ABOUT_DOG_SHELTER);
 
     }
-
+    /**
+     *Отправка информации о правилах знакомства с собаками
+     *
+     * @param idChat идентификатор чата для определения ботом кому отвечать
+     */
     public void sendDogDatingRules(Long idChat) {
         logger.info("ChatId={}; Method sendHowTakeDog was started for send how take a dog", idChat);
         sendMessage(idChat, InfoAboutDogShelter.DOG_DATING_RULES);
     }
-
+    /**
+     * Создание клавиатуры с командами
+     *
+     * @param idChat идентификатор чата пользователя
+     * @param caption подпись к клавиатуре
+     * @param command
+     * @param nameButtons коллекция названий кнопок
+     * @param dataButtons
+     * @param width ширина клавиатуры
+     * @param height высота клавиатуры
+     */
     public void sendButtonsWithOneData(
             Long idChat,
             String caption,
@@ -164,12 +202,20 @@ public class TelegramBotSenderService {
         }
     }
 
-
+    /**
+     * Отправка команд, обрабатываемых ботом, в чат волонтёра
+     *
+     * @param idChat идентификатор чата для определения ботом кому отвечать
+     */
     public void sendListCommandForChat(Long idChat) {
         logger.info("ChatId={}; Method sendListCommandForChat was started for send list of command", idChat);
         sendMessage(idChat, Command.getAllTitlesAsListExcludeHide(chatService.isVolunteer(idChat)));
     }
-
+    /**
+     * Отправка клавиатуры с командами в чат волонтёра
+     *
+     * @param idChat идентификатор чата для определения ботом кому отвечать
+     */
     public void sendButtonsCommandForChat(Long idChat,int stage) {
         logger.info("ChatId={}; Method sendListCommandForChat was started for send list of command", idChat);
         boolean isVolunteer = chatService.isVolunteer(idChat);
@@ -206,7 +252,12 @@ public class TelegramBotSenderService {
                 dataList,
                 width, height);
     }
-
+    /**
+     * Отправка фото
+     *
+     * @param idChat идентификатор чата для определения ботом кому отвечать
+     * @param pathFile местоположение отправляемого фото
+     */
     public void sendPhoto(Long idChat, String pathFile) throws IOException {
         Path path = Paths.get(pathFile);
         byte[] file = Files.readAllBytes(path);

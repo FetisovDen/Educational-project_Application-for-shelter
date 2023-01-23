@@ -27,7 +27,9 @@ public class TelegramBotContentSaver {
         this.telegramBotSenderService = telegramBotSenderService;
         this.telegramBot = telegramBot;
     }
-
+    /**
+     * Сохраняем фото, присланное пользователем
+     */
     public void savePhoto(Update update) throws IOException {
         Long idChat = update.message().chat().id();
         logger.info("ChatId={}; Method savePhoto was start for save receive photo", idChat);
@@ -54,7 +56,9 @@ public class TelegramBotContentSaver {
         Files.write(myPath, telegramBot.getFileContent(file).clone());
         logger.info("ChatId={}; Method savePhoto successfully received the photo", idChat);
     }
-
+    /**
+     * Проверяем и при отсутствии создаём папку под файл
+     */
     private boolean checkOrCreateFolder(String path) {
         java.io.File folder = new java.io.File(path);
         if (!folder.exists()) {
@@ -62,7 +66,9 @@ public class TelegramBotContentSaver {
         }
         return false;
     }
-
+    /**
+     * Получение и создание пути сохранения файла
+     */
     private Path getAndCreatePath(Long idChat, String folderName, String fileFormat) {
         StringBuilder pathFolder = new StringBuilder(materialsDir + "/");
         if (checkOrCreateFolder(pathFolder.toString())) {
@@ -83,7 +89,9 @@ public class TelegramBotContentSaver {
         }
         return null;
     }
-
+    /**
+     * Создание формата файла
+     */
     private String parseFileFormat(String filePath) {
         if (filePath.contains(".")) {
             int index = filePath.lastIndexOf(".");

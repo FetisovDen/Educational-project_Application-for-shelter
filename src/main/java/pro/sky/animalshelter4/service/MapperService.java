@@ -13,7 +13,11 @@ import pro.sky.animalshelter4.model.UpdateDTO;
 public class MapperService {
 
     private final Logger logger = LoggerFactory.getLogger(MapperService.class);
-
+    /**
+     * Обработка обновления, проверка на nullы, наличие команд, сообщений, фото
+     *
+     * @param update полученное обновление
+     */
     public UpdateDTO toDTO(Update update) {
 //update
         if (update == null) {
@@ -101,11 +105,19 @@ public class MapperService {
         }
         return updateDTO;
     }
-
+    /**
+     * Проверка строки на наличие содержания (не null и длина больше 0)
+     */
     private boolean isNotNullOrEmpty(String s) {
         return s != null && s.length() > 0;
     }
-
+    /**
+     * Возвращаем слово из строки по индексу.
+     * Если в строке одно слово, метод вернет строку неизменной.
+     * Если индекс выходит за пределы массива слов строки, метод вернет пустую строку.
+     * @param s обрабатываемая строка
+     * @param indexWord индекс слова
+     */
     public String toWord(String s, int indexWord) {
         logger.debug("Method toWord was start for parse from string = {} word # = {}", s, indexWord);
 
@@ -123,7 +135,9 @@ public class MapperService {
         logger.debug("Method toWord return {}", sMas[indexWord]);
         return sMas[indexWord];
     }
-
+    /**
+     * Находим id чата пользователя
+     */
     public Long toChatId(Update update) {
         if (update.message() != null &&
                 update.message().from() != null &&
@@ -136,7 +150,9 @@ public class MapperService {
         }
         return null;
     }
-
+    /**
+     * Находим имя пользователя
+     */
     public String toUserName(User user) {
         String name = "";
         if (isNotNullOrEmpty(user.firstName())) {
