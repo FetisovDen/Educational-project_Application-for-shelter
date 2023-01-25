@@ -24,7 +24,7 @@ class MapperUpdateToDTOServiceTest {
     private final MapperUpdateToDTOService mapperUpdateToDTOService = new MapperUpdateToDTOService();
 
     @ParameterizedTest
-    @MethodSource("paramForToDPO")
+    @MethodSource("paramForToDTO")
     void toDPO(Update updateTdo, UpdateDTO updateDTO) {
         UpdateDTO actual = updateDTO;
         UpdateDTO expected = mapperUpdateToDTOService.toDTO(updateTdo);
@@ -40,7 +40,7 @@ class MapperUpdateToDTOServiceTest {
         Assertions.assertEquals(actual, expected);
     }
 
-    public static Stream<Arguments> paramForToDPO() {
+    public static Stream<Arguments> paramForToDTO() {
         return Stream.of(
                 //standard positive
                 Arguments.of(
@@ -50,19 +50,20 @@ class MapperUpdateToDTOServiceTest {
                                 "789",
                                 50L,
                                 Command.START.getTitle(),
+                                null,
                                 false),
                         new UpdateDTO(
                                 50L,
-                                "123",
                                 "456",
+                                "123",
                                 Command.START,
-                                Command.INFO.getTitle(),
+                                "",
                                 null,
                                 null,
                                 InteractionUnit.COMMAND
                         )
                 ),
-                //message text = Command + " " + text
+//                message text = Command + " " + text
                 Arguments.of(
                         GENERATOR.generateUpdateMessageWithReflection(
                                 "123",
@@ -70,19 +71,20 @@ class MapperUpdateToDTOServiceTest {
                                 "789",
                                 50L,
                                 Command.START.getTitle() + " fsfdsfs",
+                                null,
                                 false),
                         new UpdateDTO(
                                 50L,
+                                "456",
                                 "123",
-                                "",
                                 Command.START,
-                                Command.INFO.getTitle(),
+                                "fsfdsfs",
                                 null,
                                 null,
                                 InteractionUnit.COMMAND
                         )
                 ),
-                //firstName = "", lastName = null, message = Command + " fsfdsfs sdfsdf sdf s "
+           //firstName = "", lastName = null, message = Command + " fsfdsfs sdfsdf sdf s "
                 Arguments.of(
                         GENERATOR.generateUpdateMessageWithReflection(
                                 "123",
@@ -90,19 +92,20 @@ class MapperUpdateToDTOServiceTest {
                                 null,
                                 50L,
                                 Command.START.getTitle() + " fsfdsfs sdfsdf sdf s ",
+                                "rer",
                                 false),
                         new UpdateDTO(
                                 50L,
                                 "123",
-                                "",
+                                "123",
                                 Command.START,
-                                Command.INFO.getTitle(),
+                                "fsfdsfs sdfsdf sdf s",
                                 null,
                                 null,
                                 InteractionUnit.COMMAND
                         )
                 ),
-                //firstName = null, lastName = null, userName=null, message = Command + Command
+         //firstName = null, lastName = null, userName=null, message = Command + Command
                 Arguments.of(
                         GENERATOR.generateUpdateMessageWithReflection(
                                 "123",
@@ -110,11 +113,12 @@ class MapperUpdateToDTOServiceTest {
                                 null,
                                 50L,
                                 Command.START.getTitle() + " " + Command.INFO.getTitle(),
+                                "rer",
                                 false),
                         new UpdateDTO(
                                 50L,
                                 "123",
-                                "",
+                                "123",
                                 Command.START,
                                 Command.INFO.getTitle(),
                                 null,
@@ -130,6 +134,7 @@ class MapperUpdateToDTOServiceTest {
                                 "789",
                                 null,
                                 Command.START.getTitle() + " " + Command.INFO.getTitle(),
+                                "rer",
                                 false),
                         null
                 ),
@@ -141,13 +146,14 @@ class MapperUpdateToDTOServiceTest {
                                 "789",
                                 50L,
                                 "/sagfasd",
+                                "rer",
                                 false),
                         new UpdateDTO(
                                 50L,
+                                "456",
                                 "123",
-                                "",
-                                Command.START,
-                                Command.INFO.getTitle(),
+                                null,
+                                "/sagfasd",
                                 null,
                                 null,
                                 InteractionUnit.COMMAND
@@ -161,6 +167,7 @@ class MapperUpdateToDTOServiceTest {
                                 "789",
                                 -50L,
                                 "/sagfasd",
+                                "rer",
                                 false),
                         null
                 )

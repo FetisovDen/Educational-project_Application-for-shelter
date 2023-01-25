@@ -28,6 +28,10 @@ public class TelegramBotUpdatesService {
         this.callRequestService = callRequestService;
     }
 
+    public void setChoosingShelter(String choosingShelter) {
+        this.choosingShelter = choosingShelter;
+    }
+
     public void processUpdate(Update update) {
         if (update == null) {
             logger.debug("Method processUpdate detected null update");
@@ -54,6 +58,8 @@ public class TelegramBotUpdatesService {
             case MESSAGE:
                 if (Character.isDigit(updateDTO.getMessage().charAt(0)) || updateDTO.getMessage().startsWith("+")) {
                     telegramBotContentSaver.savePhone(updateDTO);
+                } else if (telegramBotContentSaver.checkOwner(updateDTO.getIdChat())!= null) {
+                    telegramBotSenderService.sendAddPhoto(updateDTO.getIdChat());
                 } else {
                     telegramBotSenderService.sendSorryIKnowThis(updateDTO.getIdChat(), 0, choosingShelter);
                 }
@@ -72,11 +78,11 @@ public class TelegramBotUpdatesService {
                         telegramBotSenderService.sendStartButtons(updateDTO.getIdChat(), updateDTO.getName(), 0, choosingShelter);
                         break;
                     case CAT_SHELTER:
-                        choosingShelter = "cat";
+                        setChoosingShelter("cat");
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 1, choosingShelter);
                         break;
                     case DOG_SHELTER:
-                        choosingShelter = "dog";
+                        setChoosingShelter("dog");
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 1, choosingShelter);
                         break;
                     case INFO:
@@ -152,7 +158,7 @@ public class TelegramBotUpdatesService {
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 5, choosingShelter);
                         break;
                     case RETURN:
-                        choosingShelter = null;
+                        setChoosingShelter(null);
                         telegramBotSenderService.sendButtonsCommandForChat(updateDTO.getIdChat(), 0, choosingShelter);
                         break;
                     case EMPTY_CALLBACK_DATA_FOR_BUTTON:

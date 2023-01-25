@@ -2,6 +2,7 @@ package pro.sky.animalshelter4.controller.reportController;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,7 +39,7 @@ public class ReportDogOwnerController {
             }, tags = "DogOwnerReport"
     )
     @GetMapping()
-    public ResponseEntity<List<ReportDogOwnerEntity>> findAllByDate(@RequestParam String date){
+    public ResponseEntity<List<ReportDogOwnerEntity>> findAllByDate(@Parameter(description = "Дата в формате ДД.ММ.ГГГГ")@RequestParam String date){
         return ResponseEntity.ok(reportDogOwnerService.readAllByDay(date));
     }
 
@@ -54,8 +55,8 @@ public class ReportDogOwnerController {
                     )
             }, tags = "DogOwnerReport"
     )
-    @DeleteMapping()
-    public ResponseEntity<List<ReportDogOwnerEntity>> deleteByChatId(@RequestParam Long chatId){
+    @DeleteMapping("{chatId}/delete")
+    public ResponseEntity<List<ReportDogOwnerEntity>> deleteByChatId(@Parameter(description = "Owner chatId") @PathVariable Long chatId){
         reportDogOwnerService.clear(chatId);
         return ResponseEntity.ok().build();
     }

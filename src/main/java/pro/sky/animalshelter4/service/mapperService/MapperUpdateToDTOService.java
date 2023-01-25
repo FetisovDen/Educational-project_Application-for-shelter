@@ -130,20 +130,6 @@ public class MapperUpdateToDTOService {
         logger.debug("Method toWord return {}", sMas[indexWord]);
         return sMas[indexWord];
     }
-
-    public Long toChatId(Update update) {
-        if (update.message() != null &&
-                update.message().from() != null &&
-                update.message().from().id() != null) {
-            return update.message().from().id();
-        } else if (update.callbackQuery() != null &&
-                update.callbackQuery().from() != null &&
-                update.callbackQuery().from().id() != null) {
-            return update.callbackQuery().from().id();
-        }
-        return null;
-    }
-
     public String toUserName(User user) {
         String name = "";
         if (isNotNullOrEmpty(user.firstName())) {

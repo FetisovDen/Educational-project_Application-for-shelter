@@ -53,7 +53,7 @@ public class ReportDogOwnerService {
      * Удаление отчетов по Id владельца
      * @param chatId id
      */
-    public void clear(long chatId) {
+    public void clear(Long chatId) {
         logger.debug("was invoking method clear");
         reportDogOwnerRepository.deleteAllByChatId(chatId);
     }

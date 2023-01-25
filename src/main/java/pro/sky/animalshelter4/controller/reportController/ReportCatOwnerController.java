@@ -2,6 +2,7 @@ package pro.sky.animalshelter4.controller.reportController;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.animalshelter4.entity.reportEntity.ReportCatOwnerEntity;
+import pro.sky.animalshelter4.entity.reportEntity.ReportDogOwnerEntity;
 import pro.sky.animalshelter4.service.reportService.ReportCatOwnerService;
 
 import java.io.IOException;
@@ -54,8 +56,8 @@ public class ReportCatOwnerController {
                     )
             }, tags = "CatOwnerReport"
     )
-    @DeleteMapping()
-    public ResponseEntity<List<ReportCatOwnerEntity>> deleteByChatId(@RequestParam Long chatId){
+    @DeleteMapping("{chatId}/delete")
+    public ResponseEntity<List<ReportCatOwnerEntity>> deleteByChatId(@Parameter(description = "Owner chatId") @PathVariable Long chatId){
         reportCatOwnerService.clear(chatId);
         return ResponseEntity.ok().build();
     }

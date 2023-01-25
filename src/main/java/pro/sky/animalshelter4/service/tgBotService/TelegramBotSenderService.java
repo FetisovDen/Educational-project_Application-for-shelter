@@ -36,7 +36,7 @@ public class TelegramBotSenderService {
     public static final String MESSAGE_HELLO = "Привет, ";
     public static final String DEFAULT_MESSAGE_WITHOUT_CHOOSING_SHELTER = "Необходимо выбрать приют ";
     public static final String REPORT_WITHOUT_TEXT = "Для отчета необходимо добавить текст";
-
+    public static final String REPORT_WITHOUT_PHOTO = "Для отчета необходимо текст отправлять в подпись к фото с питомцем";
 
     private final Logger logger = LoggerFactory.getLogger(TelegramBotSenderService.class);
     private final TelegramBot telegramBot;
@@ -276,6 +276,11 @@ public class TelegramBotSenderService {
     public void sendAddText(Long idChat) {
         logger.info("ChatId={}; Method sendAddText was started for send report form", idChat);
         sendMessage(idChat, REPORT_WITHOUT_TEXT);
+        sendMessage(idChat, InfoReport.reportForm());
+    }
+    public void sendAddPhoto(Long idChat) {
+        logger.info("ChatId={}; Method sendAddPhoto was started for send report form", idChat);
+        sendMessage(idChat, REPORT_WITHOUT_PHOTO);
         sendMessage(idChat, InfoReport.reportForm());
     }
 
