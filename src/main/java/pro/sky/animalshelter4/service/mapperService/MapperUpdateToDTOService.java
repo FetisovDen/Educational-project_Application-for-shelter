@@ -1,0 +1,174 @@
+package pro.sky.animalshelter4.service.mapperService;
+
+import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import pro.sky.animalshelter4.model.Command;
+import pro.sky.animalshelter4.model.InteractionUnit;
+import pro.sky.animalshelter4.recordDTO.UpdateDTO;
+import pro.sky.animalshelter4.service.tgBotService.TelegramBotSenderService;
+
+@Service
+public class MapperUpdateToDTOService {
+    private final Logger logger = LoggerFactory.getLogger(MapperUpdateToDTOService.class);
+    /**
+     * Обработка обновления, проверка на nullы, наличие команд, сообщений, фото
+     *
+     * @param update полученное обновление
+     */
+    public UpdateDTO toDTO(Update update) {
+//update
+        if (update == null) {
+            logger.debug("Method toDTO detected null update");
+            return null;
+        }
+        UpdateDTO updateDTO = new UpdateDTO();
+//message!=null
+        if (update.message() != null) {
+            logger.debug("Method toDTO detected message into update");
+//message from
+            if (update.message().from() != null &&
+                    update.message().from().id() != null) {
+                if (update.message().from().id() < 0) {
+                    logger.error("Method toDTO detected userId < 0");
+                    return null;
+                }
+                updateDTO.setIdChat(update.message().from().id());
+                updateDTO.setName(toUserName(update.message().from()));
+                updateDTO.setUserName(update.message().from().username());
+                logger.debug("ChatId={}; Method toDTO detected idChat", updateDTO.getIdChat());
+            } else {
+                logger.error("Method toDTO detected null user in update.message()");
+                return null;
+            }
+//message photo
+            if (update.message().photo() != null) {
+                logger.debug("ChatId={}; Method toDTO detected photo in message()", updateDTO.getIdChat());
+                updateDTO.setInteractionUnit(InteractionUnit.REPORT_PHOTO_AND_CAPTION);
+                int maxPhotoIndex = update.message().photo().length - 1;
+                if (update.message().photo()[maxPhotoIndex].fileId() != null) {
+                    updateDTO.setIdMedia(update.message().photo()[maxPhotoIndex].fileId());
+                    updateDTO.setReportText(update.message().caption());
+                } else {
+                    logger.debug("ChatId={}; Method toDTO detected null fileId in photo", updateDTO.getIdChat());
+                }
+            }
+            if(update.message().sticker() != null){
+                logger.error("Method toDTO detected update.message().sticker()");
+                return null;
+            }
+//message text
+            if (update.message().text() != null) {
+                logger.debug("ChatId={}; Method toDTO detected text in message()", updateDTO.getIdChat());
+                updateDTO.setInteractionUnit(InteractionUnit.MESSAGE);
+                updateDTO.setMessage(update.message().text().trim());
+//callbackQuery!=null
+            }
+        } else if (update.callbackQuery() != null) {
+            logger.debug("Method toDTO detected callbackQuery into update");
+            updateDTO.setInteractionUnit(InteractionUnit.CALLBACK_QUERY);
+//callbackQuery from
+            if (update.callbackQuery().from() != null &&
+                    update.callbackQuery().from().id() != null) {
+                if (update.callbackQuery().from().id() < 0) {
+                    logger.error("Method toDTO detected userId < 0");
+                    return null;
+                }
+                updateDTO.setIdChat(update.callbackQuery().from().id());
+                updateDTO.setName(toUserName(update.callbackQuery().from()));
+                updateDTO.setUserName(update.callbackQuery().from().username());
+                logger.debug("ChatId={}; Method toDTO detected idChat", updateDTO.getIdChat());
+            } else {
+                logger.error("Method toDTO detected null user in update.callbackQuery()");
+                return null;
+            }
+//callbackQuery data
+            if (update.callbackQuery().data() != null) {
+                logger.debug("ChatId={}; Method toDPO detected data in callbackQuery()", updateDTO.getIdChat());
+                updateDTO.setInteractionUnit(InteractionUnit.MESSAGE);
+                updateDTO.setMessage(update.callbackQuery().data().trim());
+            }
+        }
+//updateDpo.Message -> Command
+        if (updateDTO.getMessage() != null && updateDTO.getMessage().startsWith("/")) {
+            updateDTO.setInteractionUnit(InteractionUnit.COMMAND);
+            updateDTO.setCommand(Command.fromString(
+                    toWord(updateDTO.getMessage(), 0)));
+            if (updateDTO.getCommand() != null) {
+                logger.debug("ChatId={}; Method toDTO detected command = {}",
+                        updateDTO.getIdChat(), updateDTO.getCommand().getTitle());
+                if (updateDTO.getCommand().getTitle().trim().length() >= updateDTO.getCommand().getTitle().length()) {
+                    updateDTO.setMessage(updateDTO.getMessage().
+                            substring(
+                                    updateDTO.getCommand().getTitle().length()).
+                            trim());
+                }
+            }
+        } else {
+            logger.debug("ChatId={}; Method toDTO don't detected command in callbackQuery()", updateDTO.getIdChat());
+            updateDTO.setCommand(null);
+        }
+        return updateDTO;
+    }
+    /**
+     * Проверка строки на наличие содержания (не null и длина больше 0)
+     */
+    private boolean isNotNullOrEmpty(String s) {
+        return s != null && s.length() > 0;
+    }
+    /**
+     * Возвращаем слово из строки по индексу.
+     * Если в строке одно слово, метод вернет строку неизменной.
+     * Если индекс выходит за пределы массива слов строки, метод вернет пустую строку.
+     * @param s обрабатываемая строка
+     * @param indexWord индекс слова
+     */
+    public String toWord(String s, int indexWord) {
+        logger.debug("Method toWord was start for parse from string = {} word # = {}", s, indexWord);
+
+        if (!s.contains(TelegramBotSenderService.REQUEST_SPLIT_SYMBOL)) {
+            logger.debug("Method toWord don't found REQUEST_SPLIT_SYMBOL = {} and return",
+                    TelegramBotSenderService.REQUEST_SPLIT_SYMBOL);
+            return s;
+        }
+        String[] sMas = s.split(TelegramBotSenderService.REQUEST_SPLIT_SYMBOL);
+
+        if (indexWord >= sMas.length) {
+            logger.debug("Method toWord detect index of word bigger of sum words in string and return empty string");
+            return "";
+        }
+        logger.debug("Method toWord return {}", sMas[indexWord]);
+        return sMas[indexWord];
+    }
+    /**
+     * Находим id чата пользователя
+     */
+    public Long toChatId(Update update) {
+        if (update.message() != null &&
+                update.message().from() != null &&
+                update.message().from().id() != null) {
+            return update.message().from().id();
+        } else if (update.callbackQuery() != null &&
+                update.callbackQuery().from() != null &&
+                update.callbackQuery().from().id() != null) {
+            return update.callbackQuery().from().id();
+        }
+        return null;
+    }
+    /**
+     * Находим имя пользователя
+     */
+    public String toUserName(User user) {
+        String name = "";
+        if (isNotNullOrEmpty(user.firstName())) {
+            name = user.firstName();
+        } else if (isNotNullOrEmpty(user.lastName())) {
+            name = user.lastName();
+        } else if (isNotNullOrEmpty(user.username())) {
+            name = user.username();
+        }
+        return name;
+    }
+}

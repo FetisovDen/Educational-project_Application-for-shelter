@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
-import pro.sky.animalshelter4.entity.Chat;
+import pro.sky.animalshelter4.entity.chatEntity.Chat;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -56,22 +56,23 @@ public class Generator {
             chat.setName(generateNameIfEmpty(update.callbackQuery().from().firstName()));
         }
         chat.setVolunteer(false);
-        chat.setPhone(generatePhoneIfEmpty(""));
+        chat.setTelegramName(generatePhoneIfEmpty(""));
         return chat;
     }
 
-    public Chat generateChat(Long idChat, String name, String address, String phone, boolean isVolunteer, boolean needGenerate) {
+    public Chat generateChat(Long idChat, String name, String telegramName, String phone,boolean isOwner, boolean isVolunteer, boolean needGenerate) {
         if (needGenerate) {
             idChat = generateIdIfEmpty(idChat);
             name = generateNameIfEmpty(name);
-            address = generateAddressIfEmpty(address);
+            telegramName = generateNameIfEmpty(telegramName);
             phone = generatePhoneIfEmpty(phone);
         }
         Chat chat = new Chat();
         chat.setId(idChat);
         chat.setName(name);
+        chat.setTelegramName(telegramName);
         chat.setPhone(phone);
-        chat.setAddress(address);
+        chat.setOwner(isOwner);
         chat.setVolunteer(isVolunteer);
         return chat;
     }
@@ -125,7 +126,7 @@ public class Generator {
     }
 
     public Update generateUpdateMessageWithReflection() {
-        return generateUpdateMessageWithReflection("", "", "", -1L, "", true);
+        return generateUpdateMessageWithReflection("", "", "", -1L,"","", true);
     }
 
     public Update generateUpdateMessageWithReflection(String userName,
@@ -133,6 +134,7 @@ public class Generator {
                                                       String lastName,
                                                       Long chatId,
                                                       String messageText,
+                                                      String reportText,
                                                       boolean needGenerate) {
         if (needGenerate) {
             userName = generateNameIfEmpty(userName);
@@ -140,6 +142,7 @@ public class Generator {
             lastName = generateNameIfEmpty(lastName);
             messageText = generateMessageIfEmpty(messageText);
             chatId = generateIdIfEmpty(chatId);
+            reportText = generateReportTextIfEmpty(reportText);
         }
 
         Update update = new Update();
@@ -185,25 +188,12 @@ public class Generator {
         return update;
     }
 
-    public int generateTimeZoneIfNull(Integer timeZone) {
-        if (timeZone == null || timeZone < 0) {
-            timeZone = faker.random().nextInt(-11, 12);
-        }
-        return timeZone;
-    }
 
     public String generateAddressIfEmpty(String address) {
         if (address == null || address.length() == 0) {
             return faker.address().streetAddress();
         }
         return address;
-    }
-
-    public String generateCityIfEmpty(String city) {
-        if (city == null || city.length() == 0) {
-            return faker.address().city();
-        }
-        return city;
     }
 
     public String generatePhoneIfEmpty(String phone) {
@@ -241,5 +231,19 @@ public class Generator {
             return faker.lordOfTheRings().character();
         }
         return message;
+    }
+    private String generateReportTextIfEmpty(String reportText) {
+        if (reportText == null || reportText.length() == 0) {
+            return faker.lordOfTheRings().location();
+        }
+        return reportText;
+    }
+
+
+    private String choosingShelter(String choosingShelter) {
+        if (choosingShelter == null || choosingShelter.length() == 0) {
+            return "cat";
+        }
+        return "dog";
     }
 }
