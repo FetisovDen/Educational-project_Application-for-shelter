@@ -12,7 +12,7 @@ import java.util.Objects;
 @Entity(name = "dog_owner")
 public class DogOwnerEntity {
     @Id
-    private Long Id;
+    private Long id;
     private String ownerName;
     private String dogName;
     private Timestamp startDate;
@@ -25,11 +25,11 @@ public class DogOwnerEntity {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getOwnerName() {
@@ -88,7 +88,7 @@ public class DogOwnerEntity {
     @Override
     public String toString() {
         return "dogOwnerEntity{" +
-                "Id=" + Id +
+                "Id=" + id +
                 ", ownerName='" + ownerName + '\'' +
                 ", dogName='" + dogName + '\'' +
                 ", date=" + startDate +

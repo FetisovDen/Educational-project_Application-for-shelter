@@ -55,7 +55,7 @@ public class ReportDogOwnerController {
                     )
             }, tags = "DogOwnerReport"
     )
-    @DeleteMapping("{chatId}/delete")
+    @DeleteMapping("{chatId}")
     public ResponseEntity<List<ReportDogOwnerEntity>> deleteByChatId(@Parameter(description = "Owner chatId") @PathVariable Long chatId){
         reportDogOwnerService.clear(chatId);
         return ResponseEntity.ok().build();

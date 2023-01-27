@@ -32,11 +32,12 @@ public class TelegramBotContentSaver {
     private final TelegramBotSenderService telegramBotSenderService;
     private final TelegramBot telegramBot;
     private final CatOwnerService catOwnerService;
-
     private final ChatService chatService;
     private final DogOwnerService dogOwnerService;
     private final ReportCatOwnerService reportCatOwnerService;
     private final ReportDogOwnerService reportDogOwnerService;
+
+    private final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public TelegramBotContentSaver(@Value("${path.to.materials.folder}") String materialsDir,
                                    TelegramBotSenderService telegramBotSenderService,
@@ -62,7 +63,7 @@ public class TelegramBotContentSaver {
         int maxPhotoIndex = update.message().photo().length - 1;
         Long idChat = update.message().chat().id();
         String checkOwner = checkOwner(idChat);
-        if (checkOwner!=null) {
+        if (checkOwner != null) {
             if (reportText == null) {
                 telegramBotSenderService.sendAddText(idChat);
             } else {
@@ -73,7 +74,6 @@ public class TelegramBotContentSaver {
                         update.message().photo()[maxPhotoIndex].fileSize());
                 GetFile getFile = new GetFile(update.message().photo()[maxPhotoIndex].fileId());
                 String url = telegramBot.getFullFilePath(telegramBot.execute(getFile).file());
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 Path path = Path.of(materialsDir, idChat + "_" + LocalDateTime.now().format(format) + ".jpg");
                 try (InputStream is = new URL(url).openStream()) {
                     byte[] img = is.readAllBytes();
@@ -82,17 +82,17 @@ public class TelegramBotContentSaver {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                if(checkOwner.equals("cat")){
-                ReportCatOwnerEntity reportCatOwner = new ReportCatOwnerEntity();
-                reportCatOwner.setChatId(idChat);
-                reportCatOwner.setTime(Timestamp.valueOf(LocalDateTime.now()));
-                reportCatOwner.setCompletedToday(true);
-                reportCatOwner.setText(reportText);
-                reportCatOwner.setFilePath(path.toString());
-                reportCatOwner.setCatOwner(catOwnerService.findCatOwnerById(idChat));
-                reportCatOwnerService.create(reportCatOwner);
-                telegramBotSenderService.successfulReportMessage(idChat);}
-                else if (checkOwner.equals("dog")){
+                if (checkOwner.equals("cat")) {
+                    ReportCatOwnerEntity reportCatOwner = new ReportCatOwnerEntity();
+                    reportCatOwner.setChatId(idChat);
+                    reportCatOwner.setTime(Timestamp.valueOf(LocalDateTime.now()));
+                    reportCatOwner.setCompletedToday(true);
+                    reportCatOwner.setText(reportText);
+                    reportCatOwner.setFilePath(path.toString());
+                    reportCatOwner.setCatOwner(catOwnerService.findCatOwnerById(idChat));
+                    reportCatOwnerService.create(reportCatOwner);
+                    telegramBotSenderService.successfulReportMessage(idChat);
+                } else if (checkOwner.equals("dog")) {
                     ReportDogOwnerEntity reportDogOwner = new ReportDogOwnerEntity();
                     reportDogOwner.setChatId(idChat);
                     reportDogOwner.setTime(Timestamp.valueOf(LocalDateTime.now()));
@@ -109,9 +109,9 @@ public class TelegramBotContentSaver {
         }
     }
 
-    public void savePhone(UpdateDTO updateDTO){
+    public void savePhone(UpdateDTO updateDTO) {
         logger.info("method savePhone started");
-        if(updateDTO.getMessage().matches("^\\+\\d{11}$|^\\d{11}$")){
+        if (updateDTO.getMessage().matches("^\\+\\d{11}$|^\\d{11}$")) {
             logger.info("method savePhone found phone and save it");
             Chat chat = chatService.getChatByIdOrNewWithName(updateDTO.getIdChat(), updateDTO.getName(), updateDTO.getUserName());
             chat.setPhone(updateDTO.getMessage());
@@ -122,7 +122,6 @@ public class TelegramBotContentSaver {
             telegramBotSenderService.unSuccessfulPhoneSave(updateDTO.getIdChat());
         }
     }
-
 
 
     public String checkOwner(Long idChat) {

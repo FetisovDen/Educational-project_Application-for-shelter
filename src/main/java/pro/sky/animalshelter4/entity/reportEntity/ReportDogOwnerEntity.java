@@ -10,7 +10,7 @@ import java.util.Objects;
 public class ReportDogOwnerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private Long chatId;
     private Timestamp time;
     private boolean completedToday;
@@ -25,11 +25,11 @@ public class ReportDogOwnerEntity {
 
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public Long getChatId() {
@@ -96,7 +96,7 @@ public class ReportDogOwnerEntity {
     @Override
     public String toString() {
         return "ReportDogOwnerEntity{" +
-                "Id=" + Id +
+                "Id=" + id +
                 ", chatId=" + chatId +
                 ", time=" + time +
                 ", completedToday=" + completedToday +

@@ -41,10 +41,12 @@ public class TelegramBotSenderService {
     private final Logger logger = LoggerFactory.getLogger(TelegramBotSenderService.class);
     private final TelegramBot telegramBot;
     private final ChatService chatService;
+    private final InfoReport infoReport;
 
-    public TelegramBotSenderService(TelegramBot telegramBot, ChatService chatService) {
+    public TelegramBotSenderService(TelegramBot telegramBot, ChatService chatService, InfoReport infoReport) {
         this.telegramBot = telegramBot;
         this.chatService = chatService;
+        this.infoReport = infoReport;
     }
 
     public void sendMessage(Long idChat, String textMessage) {
@@ -270,18 +272,19 @@ public class TelegramBotSenderService {
 
     public void sendReportForm(Long idChat) {
         logger.info("ChatId={}; Method sendReportForm was started for send report form", idChat);
-        sendMessage(idChat, InfoReport.reportForm());
+        sendMessage(idChat, infoReport.reportForm());
     }
 
     public void sendAddText(Long idChat) {
         logger.info("ChatId={}; Method sendAddText was started for send report form", idChat);
         sendMessage(idChat, REPORT_WITHOUT_TEXT);
-        sendMessage(idChat, InfoReport.reportForm());
+        sendMessage(idChat, infoReport.reportForm());
     }
+
     public void sendAddPhoto(Long idChat) {
         logger.info("ChatId={}; Method sendAddPhoto was started for send report form", idChat);
         sendMessage(idChat, REPORT_WITHOUT_PHOTO);
-        sendMessage(idChat, InfoReport.reportForm());
+        sendMessage(idChat, infoReport.reportForm());
     }
 
     public void successfulReportMessage(Long idChat) {
@@ -296,22 +299,22 @@ public class TelegramBotSenderService {
 
     public void warnAboutPoorReport(long chatId) {
         logger.info("ChatId={}; Method warnAboutPoorReport was started", chatId);
-        sendMessage(chatId, InfoReport.warnAboutPoorReport());
+        sendMessage(chatId, infoReport.warnAboutPoorReport());
     }
 
     public void warnAboutRefuse(long chatId) {
         logger.info("ChatId={}; Method warnAboutRefuse was started", chatId);
-        sendMessage(chatId, InfoReport.warnAboutRefuse());
+        sendMessage(chatId, infoReport.warnAboutRefuse());
     }
 
     public void warnAboutApproval(long chatId) {
         logger.info("ChatId={}; Method warnAboutApproval was started", chatId);
-        sendMessage(chatId, InfoReport.warnAboutApproval());
+        sendMessage(chatId, infoReport.warnAboutApproval());
     }
 
     public void sendWarnAboutOverdue(Long chatId) {
         logger.info("ChatId={}; Method sendWarnAboutOverdue was started", chatId);
-        sendMessage(chatId, InfoReport.warnAboutOverdue());
+        sendMessage(chatId, infoReport.warnAboutOverdue());
     }
 
     public void sendWarnForVolunteersAboutOverdueTwoDay(Long chatId, String listOfOwnerWithOverdue) {
@@ -325,11 +328,12 @@ public class TelegramBotSenderService {
                 "если вы того пожелаетет, для этого выберите в меню - Позвать волонтера ");
         sendButtonsCommandForChat(chatId, 5, "cat");
     }
+
     public void unSuccessfulPhoneSave(Long chatId) {
         logger.info("ChatId={}; Method unSuccessfulPhoneSave was started", chatId);
         sendMessage(chatId, "Бот не смог разобрать номер, который вы ему отправили," +
                 " просьба соблюдать формат номера для отправки:");
-        sendInfoAboutLeaveNumber(chatId,"cat");
+        sendInfoAboutLeaveNumber(chatId, "cat");
         sendButtonsCommandForChat(chatId, 0, null);
     }
 

@@ -5,6 +5,7 @@ import pro.sky.animalshelter4.entity.ownerEntity.CatOwnerEntity;
 import pro.sky.animalshelter4.exception.ReportCatOwnerNotFoundException;
 import pro.sky.animalshelter4.recordDTO.CatOwnerRecord;
 import pro.sky.animalshelter4.repository.ownerReository.CatOwnerRepository;
+import pro.sky.animalshelter4.service.chatTgService.ChatService;
 import pro.sky.animalshelter4.service.mapperService.MapperEntityToRecordService;
 import pro.sky.animalshelter4.service.tgBotService.TelegramBotSenderService;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class CatOwnerService {
     private final CatOwnerRepository catOwnerRepository;
 
-    private final pro.sky.animalshelter4.service.chatTgService.ChatService chatService;
+    private final ChatService chatService;
     private final MapperEntityToRecordService mapper;
     private final TelegramBotSenderService telegramBotSenderService;
 

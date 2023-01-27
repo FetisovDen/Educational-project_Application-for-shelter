@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.animalshelter4.entity.reportEntity.ReportCatOwnerEntity;
-import pro.sky.animalshelter4.entity.reportEntity.ReportDogOwnerEntity;
 import pro.sky.animalshelter4.service.reportService.ReportCatOwnerService;
 
 import java.io.IOException;
@@ -56,7 +55,7 @@ public class ReportCatOwnerController {
                     )
             }, tags = "CatOwnerReport"
     )
-    @DeleteMapping("{chatId}/delete")
+    @DeleteMapping("{chatId}")
     public ResponseEntity<List<ReportCatOwnerEntity>> deleteByChatId(@Parameter(description = "Owner chatId") @PathVariable Long chatId){
         reportCatOwnerService.clear(chatId);
         return ResponseEntity.ok().build();

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class InfoReport {
-    public static String reportForm() {
+    public String reportForm() {
         return " Правила отправки боту отчета:\n\n" +
                 "  1.При добавлении фото питомца с компьютера необходимо сжимать файл\n" +
                 "  2.Текст отчета необходимо вкладывать в подпись к фото, если этого не сделать, бот не пример ваш отчет.\n" +
@@ -17,22 +17,22 @@ public class InfoReport {
                 "Каждый день волонтеры отсматривают все присланные отчеты после 21:00.";
     }
 
-    public static String warnAboutPoorReport() {
+    public  String warnAboutPoorReport() {
         return "Дорогой усыновитель, мы заметили, что ты заполняешь отчет не так подробно, как необходимо." +
                 " Пожалуйста, подойди ответственнее к этому занятию." +
                 "В противном случае волонтеры приюта будут обязаны самолично проверять условия содержания животного";
     }
 
-    public static String warnAboutRefuse() {
+    public  String warnAboutRefuse() {
         return "По решению волонтеров, на основании ваших отчетов, вам отказано во владении питомца." +
                 "Мы скоро с вами свяжемся, ожидайте";
     }
 
-    public static String warnAboutApproval() {
+    public String warnAboutApproval() {
         return "Поздравляем с успешным прохождением отчетного периода.";
     }
 
-    public static String warnAboutOverdue() {
+    public  String warnAboutOverdue() {
         return "Сегодня не был отправлен отчет, поспеши, волонтеры уже начали проверять их";
     }
 }

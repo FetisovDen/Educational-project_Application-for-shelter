@@ -14,10 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("chat")
-public class chatController {
+public class ChatController {
     private final ChatService chatService;
 
-    public chatController(ChatService chatService) {
+    public ChatController(ChatService chatService) {
         this.chatService = chatService;
     }
 

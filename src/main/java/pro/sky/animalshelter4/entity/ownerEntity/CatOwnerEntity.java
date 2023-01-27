@@ -9,7 +9,7 @@ import java.util.Objects;
 @Entity(name = "cat_owner")
 public class CatOwnerEntity {
     @Id
-    private Long Id;
+    private Long id;
     private String ownerName;
     private String catName;
     private Timestamp startDate;
@@ -22,11 +22,11 @@ public class CatOwnerEntity {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getOwnerName() {
@@ -85,7 +85,7 @@ public class CatOwnerEntity {
     @Override
     public String toString() {
         return "CatOwnerEntity{" +
-                "Id=" + Id +
+                "Id=" + id +
                 ", ownerName='" + ownerName + '\'' +
                 ", catName='" + catName + '\'' +
                 ", date=" + startDate +

@@ -1,13 +1,11 @@
 package pro.sky.animalshelter4.recordDTO;
 
-import org.springframework.stereotype.Component;
 import pro.sky.animalshelter4.model.Command;
 import pro.sky.animalshelter4.model.InteractionUnit;
 
 import java.util.Objects;
 
 //Data Transfer Object
-@Component
 public class UpdateDTO {
     private Long idChat;
     private String name;
