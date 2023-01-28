@@ -38,7 +38,7 @@ public class ReportDogOwnerController {
                     )
             }, tags = "DogOwnerReport"
     )
-    @GetMapping()
+    @GetMapping("/date")
     public ResponseEntity<List<ReportDogOwnerEntity>> findAllByDate(@Parameter(description = "Дата в формате ДД.ММ.ГГГГ")@RequestParam String date){
         return ResponseEntity.ok(reportDogOwnerService.readAllByDay(date));
     }

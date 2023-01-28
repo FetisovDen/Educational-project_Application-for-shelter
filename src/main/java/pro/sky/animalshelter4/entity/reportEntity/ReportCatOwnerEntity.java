@@ -23,7 +23,6 @@ public class ReportCatOwnerEntity {
     public ReportCatOwnerEntity() {
     }
 
-
     public Long getId() {
         return id;
     }

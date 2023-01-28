@@ -6,8 +6,15 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import pro.sky.animalshelter4.entity.chatEntity.Chat;
+import pro.sky.animalshelter4.entity.ownerEntity.CatOwnerEntity;
+import pro.sky.animalshelter4.entity.ownerEntity.DogOwnerEntity;
+import pro.sky.animalshelter4.entity.reportEntity.ReportCatOwnerEntity;
+import pro.sky.animalshelter4.entity.reportEntity.ReportDogOwnerEntity;
+import pro.sky.animalshelter4.recordDTO.CatOwnerRecord;
+import pro.sky.animalshelter4.recordDTO.DogOwnerRecord;
 
 import java.lang.reflect.Field;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -76,7 +83,98 @@ public class Generator {
         chat.setVolunteer(isVolunteer);
         return chat;
     }
+    public CatOwnerEntity generateCatOwnerEntity(Long id, String ownerName, String petName, Timestamp startDate, Long dayToEndReporting, Chat chatOwner, boolean needGenerate) {
+        if (needGenerate) {
+            id = generateIdIfEmpty(id);
+            ownerName = generateNameIfEmpty(ownerName);
+            petName = generateNameIfEmpty(petName);
+            startDate = generateStartDate(startDate);
+            dayToEndReporting = generateIdIfEmpty(id);
+            chatOwner = generateChat(id, ownerName,"","",false,false,true);
+        }
+        CatOwnerEntity catOwnerEntity = new CatOwnerEntity();
+        catOwnerEntity.setId(id);
+        catOwnerEntity.setOwnerName(ownerName);
+        catOwnerEntity.setCatName(petName);
+        catOwnerEntity.setStartDate(startDate);
+        catOwnerEntity.setDayToEndReporting(dayToEndReporting);
+        catOwnerEntity.setChatOwner(chatOwner);
+        return catOwnerEntity;
+    }
+    public DogOwnerEntity generateDogOwnerEntity(Long id, String ownerName, String petName, Timestamp startDate, Long dayToEndReporting, Chat chatOwner, boolean needGenerate) {
+        if (needGenerate) {
+            id = generateIdIfEmpty(id);
+            ownerName = generateNameIfEmpty(ownerName);
+            petName = generateNameIfEmpty(petName);
+            startDate = generateStartDate(startDate);
+            dayToEndReporting = generateIdIfEmpty(id);
+            chatOwner = generateChat(id, ownerName,"","",false,false,true);
+        }
+        DogOwnerEntity dogOwnerEntity = new DogOwnerEntity();
+        dogOwnerEntity.setId(id);
+        dogOwnerEntity.setOwnerName(ownerName);
+        dogOwnerEntity.setDogName(petName);
+        dogOwnerEntity.setStartDate(startDate);
+        dogOwnerEntity.setDayToEndReporting(dayToEndReporting);
+        dogOwnerEntity.setChatOwner(chatOwner);
+        return dogOwnerEntity;
+    }
+    public CatOwnerRecord generateCatOwnerRecord(CatOwnerEntity catOwnerEntity, boolean needGenerate) {
+        if (needGenerate) {
+        }
+        CatOwnerRecord catOwnerRecord  = new CatOwnerRecord();
+        catOwnerRecord.setChatId(catOwnerEntity.getId());
+        catOwnerRecord.setOwnerName(catOwnerEntity.getOwnerName());
+        catOwnerRecord.setCatName(catOwnerEntity.getCatName());
+        catOwnerRecord.setDayToEndReporting(catOwnerEntity.getDayToEndReporting());
+        return catOwnerRecord;
+    }
+    public DogOwnerRecord generateDogOwnerRecord(DogOwnerEntity dogOwnerEntity, boolean needGenerate) {
+        if (needGenerate) {
+        }
+        DogOwnerRecord dogOwnerRecord  = new DogOwnerRecord();
+        dogOwnerRecord.setChatId(dogOwnerEntity.getId());
+        dogOwnerRecord.setOwnerName(dogOwnerEntity.getOwnerName());
+        dogOwnerRecord.setDogName(dogOwnerEntity.getDogName());
+        dogOwnerRecord.setDayToEndReporting(dogOwnerEntity.getDayToEndReporting());
+        return dogOwnerRecord;
+    }
+    public ReportCatOwnerEntity generateReportCatOwnerEntity(Long id, Long chatId, Timestamp time, boolean completedToday, String text, String filePath, CatOwnerEntity catOwner, boolean needGenerate) {
+        if(needGenerate){
+        id = generateIdIfEmpty(id);
+        chatId = generateIdIfEmpty(chatId);
+        time = generateStartDate(time);
+        text = generateMessageIfEmpty(text);
+        filePath = generateAddressIfEmpty(filePath);
+        catOwner = generateCatOwnerEntity(id, "", "", null, null, null, true);}
+        ReportCatOwnerEntity reportCatOwnerEntity = new ReportCatOwnerEntity();
+        reportCatOwnerEntity.setId(id);
+        reportCatOwnerEntity.setChatId(chatId);
+        reportCatOwnerEntity.setTime(time);
+        reportCatOwnerEntity.setText(text);
+        reportCatOwnerEntity.setFilePath(filePath);
+        reportCatOwnerEntity.setCatOwner(catOwner);
+        return reportCatOwnerEntity;
 
+    }
+    public ReportDogOwnerEntity generateReportDogOwnerEntity(Long id, Long chatId, Timestamp time, boolean completedToday, String text, String filePath, DogOwnerEntity dogOwnerEntity, boolean needGenerate) {
+        if(needGenerate){
+            id = generateIdIfEmpty(id);
+            chatId = generateIdIfEmpty(chatId);
+            time = generateStartDate(time);
+            text = generateMessageIfEmpty(text);
+            filePath = generateAddressIfEmpty(filePath);
+            dogOwnerEntity = generateDogOwnerEntity(id, "", "", null, null, null, true);}
+        ReportDogOwnerEntity reportDogOwnerEntity = new ReportDogOwnerEntity();
+        reportDogOwnerEntity.setId(id);
+        reportDogOwnerEntity.setChatId(chatId);
+        reportDogOwnerEntity.setTime(time);
+        reportDogOwnerEntity.setText(text);
+        reportDogOwnerEntity.setFilePath(filePath);
+        reportDogOwnerEntity.setDogOwner(dogOwnerEntity);
+        return reportDogOwnerEntity;
+
+    }
     public Update generateUpdateCallbackQueryWithReflection(String userName,
                                                             String firstName,
                                                             String lastName,
@@ -238,12 +336,11 @@ public class Generator {
         }
         return reportText;
     }
-
-
-    private String choosingShelter(String choosingShelter) {
-        if (choosingShelter == null || choosingShelter.length() == 0) {
-            return "cat";
+    private Timestamp generateStartDate(Timestamp startDate) {
+        if (startDate == null) {
+            return new Timestamp(System.currentTimeMillis());
         }
-        return "dog";
+        return startDate;
     }
+
 }

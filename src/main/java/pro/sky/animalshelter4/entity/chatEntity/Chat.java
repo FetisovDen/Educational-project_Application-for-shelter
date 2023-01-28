@@ -1,8 +1,8 @@
 package pro.sky.animalshelter4.entity.chatEntity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
+import java.util.Objects;
+
 @Entity(name = "chat")
 public class Chat {
     @Id
@@ -67,5 +67,31 @@ public class Chat {
     public void setOwner(boolean owner) {
         isOwner = owner;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Chat)) return false;
+        Chat chat = (Chat) o;
+        return isVolunteer() == chat.isVolunteer() && isOwner() == chat.isOwner() && Objects.equals(getId(), chat.getId()) && Objects.equals(getName(), chat.getName()) && Objects.equals(getTelegramName(), chat.getTelegramName()) && Objects.equals(getPhone(), chat.getPhone());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getTelegramName(), getPhone(), isVolunteer(), isOwner());
+    }
+
+    @Override
+    public String toString() {
+        return "Chat{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", telegramName='" + telegramName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", isVolunteer=" + isVolunteer +
+                ", isOwner=" + isOwner +
+                '}';
+    }
 }
+
 
