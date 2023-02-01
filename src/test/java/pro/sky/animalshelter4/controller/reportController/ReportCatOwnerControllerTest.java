@@ -14,6 +14,8 @@ import pro.sky.animalshelter4.service.reportService.ReportCatOwnerService;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,8 @@ class ReportCatOwnerControllerTest {
         ReportCatOwnerEntity reportCatOwnerEntity = generator.generateReportCatOwnerEntity(58634L, 456L, null, true, "", "", null, true);
         ReportCatOwnerEntity reportCatOwnerEntity1 = generator.generateReportCatOwnerEntity(586L, 567L, null, true, "", "", null, true);
         List<ReportCatOwnerEntity> chatList = new ArrayList<>(List.of(reportCatOwnerEntity, reportCatOwnerEntity1));
+        reportCatOwnerEntity.setTime(Timestamp.valueOf(LocalDateTime.now()));
+        reportCatOwnerEntity1.setTime(Timestamp.valueOf(LocalDateTime.now()));
         when(reportCatOwnerService.readAllByDay(reportCatOwnerEntity.getTime().toString())).thenReturn(chatList);
         mockMvc.perform(MockMvcRequestBuilders.get("/cat/report/date/?date=" + reportCatOwnerEntity.getTime())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk())

@@ -14,6 +14,8 @@ import pro.sky.animalshelter4.service.reportService.ReportDogOwnerService;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,8 @@ class ReportDogOwnerControllerTest {
     void findAllByDate() throws Exception {
         ReportDogOwnerEntity reportDogOwnerEntity = generator.generateReportDogOwnerEntity(58634L, 456L, null, true, "", "", null, true);
         ReportDogOwnerEntity reportDogOwnerEntity1 = generator.generateReportDogOwnerEntity(586L, 567L, null, true, "", "", null, true);
+        reportDogOwnerEntity.setTime(Timestamp.valueOf(LocalDateTime.now()));
+        reportDogOwnerEntity1.setTime(Timestamp.valueOf(LocalDateTime.now()));
         List<ReportDogOwnerEntity> chatList = new ArrayList<>(List.of(reportDogOwnerEntity, reportDogOwnerEntity1));
         when(reportDogOwnerService.readAllByDay(reportDogOwnerEntity.getTime().toString())).thenReturn(chatList);
         mockMvc.perform(MockMvcRequestBuilders.get("/dog/report/date/?date=" + reportDogOwnerEntity.getTime())

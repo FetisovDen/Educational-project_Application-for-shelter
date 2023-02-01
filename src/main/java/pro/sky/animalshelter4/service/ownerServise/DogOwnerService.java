@@ -52,17 +52,6 @@ public class DogOwnerService {
     public DogOwnerEntity readDogOwner(Long chatId) {
         return dogOwnerRepository.findById(chatId).orElseThrow(RuntimeException::new);
     }
-
-    /**
-     * Поиск информации о владельце в БД через сервис по entity
-     *
-     * @param chatId id владельца
-     * @return найденый владелец
-     */
-    public DogOwnerEntity findDogOwnerById(Long chatId) {
-        return dogOwnerRepository.findById(chatId).orElseThrow(RuntimeException::new);
-    }
-
     /**
      * Изменение информации о владельце в БД
      *
