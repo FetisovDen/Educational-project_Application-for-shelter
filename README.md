@@ -31,10 +31,6 @@ The main task is to give the most complete information about how a person has to
 
 - [@AnastasiyaFrost](https://github.com/AnastasiyaFrost)
 
-- [@Exesebaf](https://github.com/Exesebaf)
-
-- [@unclejah](https://github.com/unclejah)
-
 - [@mukhobug](https://github.com/mukhobug)
 
 - [@voldem999](https://github.com/voldem999)
