@@ -9,6 +9,7 @@ import pro.sky.animalshelter4.service.ownerServise.CatOwnerService;
 import pro.sky.animalshelter4.service.ownerServise.DogOwnerService;
 import pro.sky.animalshelter4.service.tgBotService.TelegramBotSenderService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,11 +33,11 @@ public class ScheduleService {
     @Scheduled(cron = "0 0 21 * * *")
     public void scheduledReport() {
         logger.info("scheduledReport started");
-        List<Long> ownersWithOverdueReportingDay = catOwnerService.findAllOwnersWithOverdueReportingDay();
-       ownersWithOverdueReportingDay.addAll(dogOwnerService.findAllOwnersWithOverdueReportingDay());
+        List<Long> ownersWithOverdueReportingDay = new ArrayList<>(catOwnerService.findAllOwnersWithOverdueReportingDay());
+       ownersWithOverdueReportingDay.addAll(new ArrayList<>(dogOwnerService.findAllOwnersWithOverdueReportingDay()));
         ownersWithOverdueReportingDay.forEach(telegramBotSenderService::sendWarnAboutOverdue);
-        ownersWithOverdueReportingDay = catOwnerService.findAllOwnersWithOverdueReportingTwoDay();
-       ownersWithOverdueReportingDay.addAll(dogOwnerService.findAllOwnersWithOverdueReportingTwoDay());
+        ownersWithOverdueReportingDay = new ArrayList<>(catOwnerService.findAllOwnersWithOverdueReportingTwoDay());
+       ownersWithOverdueReportingDay.addAll( new ArrayList<>(dogOwnerService.findAllOwnersWithOverdueReportingTwoDay()));
         if (!ownersWithOverdueReportingDay.isEmpty()) {
             List<Long> listOwnerOverdueTwoDay = ownersWithOverdueReportingDay;
             chatRepository.findAllVolunteer().forEach(volunteersId ->

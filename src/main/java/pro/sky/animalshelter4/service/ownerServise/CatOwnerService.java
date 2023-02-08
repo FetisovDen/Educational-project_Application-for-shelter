@@ -55,16 +55,6 @@ public class CatOwnerService {
     }
 
     /**
-     * Поиск информации о владельце в БД через сервис по entity
-     *
-     * @param chatId id владельца
-     * @return найденый владелец
-     */
-    public CatOwnerEntity findCatOwnerById(Long chatId) {
-        return catOwnerRepository.findById(chatId).orElseThrow(RuntimeException::new);
-    }
-
-    /**
      * Изменение информации о владельце в БД
      *
      * @param catOwnerRecord DTO(Record) с информацией о владельце

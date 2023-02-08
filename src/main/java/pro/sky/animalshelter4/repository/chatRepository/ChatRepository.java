@@ -28,6 +28,10 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Query(nativeQuery = true, value = "UPDATE chat SET is_owner = true WHERE id = :id")
     void makeChatIsOwnerTrue(@Param(value = "id") Long chatId);
 
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE chat SET is_volunteer = true WHERE id = :id")
+    void makeChatIsVolunteerTrue(@Param(value = "id") Long chatId);
+
     List<Chat> findByTelegramName(String telegramName);
 
 }

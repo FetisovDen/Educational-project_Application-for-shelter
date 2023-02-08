@@ -55,9 +55,23 @@ public class ChatController {
     public ResponseEntity<List<Chat>> readChatByTgName(@PathVariable(name = "telegramName") String telegramName){
         return ResponseEntity.ok(chatService.findChatByTgName(telegramName));
     }
-
-
-
+    @Operation(summary = "Сделать себя волонтером в чате бота по id",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Чат стал волонтерским",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = CatOwnerRecord.class)
+                            )
+                    )
+            }, tags = "Chat"
+    )
+    @GetMapping("admin/{id}")
+    public ResponseEntity<Chat> makeVolunteerInChat(@PathVariable(name = "id") long chatId){
+        chatService.makeVolunteerInChat(chatId);
+        return ResponseEntity.ok().build();
+    }
 
     @Operation(summary = "Удаление чата из БД",
             responses = {

@@ -465,7 +465,7 @@ class TelegramBotUpdatesListenerTest {
         Assertions.assertThat(actual2.getParameters().get("text")).isEqualTo(TelegramBotSenderService.MESSAGE_SELECT_COMMAND);
 
         Assertions.assertThat(actual3.getParameters().get("chat_id")).isEqualTo(id2);
-        Assertions.assertThat(actual3.getParameters().get("text")).isEqualTo(TelegramBotSenderService.DEFAULT_MESSAGE_WITHOUT_CHOOSING_SHELTER);
+        Assertions.assertThat(actual3.getParameters().get("text")).isEqualTo(infoCatShelter.leaveNumber());
 
     }
 

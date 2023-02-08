@@ -143,21 +143,6 @@ public class MapperUpdateToDTOService {
         return sMas[indexWord];
     }
     /**
-     * Находим id чата пользователя
-     */
-    public Long toChatId(Update update) {
-        if (update.message() != null &&
-                update.message().from() != null &&
-                update.message().from().id() != null) {
-            return update.message().from().id();
-        } else if (update.callbackQuery() != null &&
-                update.callbackQuery().from() != null &&
-                update.callbackQuery().from().id() != null) {
-            return update.callbackQuery().from().id();
-        }
-        return null;
-    }
-    /**
      * Находим имя пользователя
      */
     public String toUserName(User user) {

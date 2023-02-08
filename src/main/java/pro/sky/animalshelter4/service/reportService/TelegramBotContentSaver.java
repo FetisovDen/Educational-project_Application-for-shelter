@@ -89,7 +89,7 @@ public class TelegramBotContentSaver {
                     reportCatOwner.setCompletedToday(true);
                     reportCatOwner.setText(reportText);
                     reportCatOwner.setFilePath(path.toString());
-                    reportCatOwner.setCatOwner(catOwnerService.findCatOwnerById(idChat));
+                    reportCatOwner.setCatOwner(catOwnerService.readCatOwner(idChat));
                     reportCatOwnerService.create(reportCatOwner);
                     telegramBotSenderService.successfulReportMessage(idChat);
                 } else if (checkOwner.equals("dog")) {
@@ -99,7 +99,7 @@ public class TelegramBotContentSaver {
                     reportDogOwner.setCompletedToday(true);
                     reportDogOwner.setText(reportText);
                     reportDogOwner.setFilePath(path.toString());
-                    reportDogOwner.setDogOwner(dogOwnerService.findDogOwnerById(idChat));
+                    reportDogOwner.setDogOwner(dogOwnerService.readDogOwner(idChat));
                     reportDogOwnerService.create(reportDogOwner);
                     telegramBotSenderService.successfulReportMessage(idChat);
                 }

@@ -1,4 +1,4 @@
-package pro.sky.animalshelter4.service;
+package pro.sky.animalshelter4.service.mapperService;
 
 import com.pengrad.telegrambot.model.Update;
 import org.junit.jupiter.api.Assertions;
@@ -11,12 +11,10 @@ import pro.sky.animalshelter4.Generator;
 import pro.sky.animalshelter4.model.Command;
 import pro.sky.animalshelter4.model.InteractionUnit;
 import pro.sky.animalshelter4.recordDTO.UpdateDTO;
-import pro.sky.animalshelter4.service.mapperService.MapperUpdateToDTOService;
 
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class MapperUpdateToDTOServiceTest {

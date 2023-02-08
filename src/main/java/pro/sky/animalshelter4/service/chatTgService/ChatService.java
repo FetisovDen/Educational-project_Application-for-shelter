@@ -82,4 +82,8 @@ public class ChatService {
     public List<Chat> findChatByTgName(String telegramName) {
         return chatRepository.findByTelegramName(telegramName);
     }
+
+    public void makeVolunteerInChat(long chatId) {
+        chatRepository.makeChatIsVolunteerTrue(chatId);
+    }
 }

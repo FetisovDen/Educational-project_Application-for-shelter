@@ -38,7 +38,7 @@ public class ReportCatOwnerController {
                     )
             }, tags = "CatOwnerReport"
     )
-    @GetMapping()
+    @GetMapping("/date")
     public ResponseEntity<List<ReportCatOwnerEntity>> findAllByDate(@RequestParam String date){
         return ResponseEntity.ok(reportCatOwnerService.readAllByDay(date));
     }
