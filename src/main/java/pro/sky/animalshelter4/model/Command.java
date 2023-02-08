@@ -58,7 +58,6 @@ public enum Command {
     //stage 5 (команды которые появляются на разных уровнях, в завсимости от прочих условий. Регулируются в методе Command.regulatingCommands;)
     LEAVE_NUMBER(19, "/phone", "Оставить номер", false, true, true,true, 5),
     CALL_REQUEST(20, "/CALL_REQUEST", "Позвать волонтера", false, true, false,true, 5),
-    CALL_CLIENT(21, "/CALL_CLIENT", "Связаться с клиентом", false, false, true,false, 5),
     RETURN(22, "/return", "↩", false, true, true,true, 5);
 
     private final int order;
@@ -126,7 +125,6 @@ public enum Command {
     public static void regulatingCommands(int stage, String choosingShelter) {
         if (stage != 0) {
             Command.RETURN.setStage(stage);
-            Command.CALL_CLIENT.setStage(stage);
             Command.CALL_REQUEST.setStage(stage);
         }
         if (stage != 0 && stage != 1){
