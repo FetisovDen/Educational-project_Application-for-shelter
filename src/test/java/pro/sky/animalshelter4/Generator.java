@@ -117,8 +117,6 @@ public class Generator {
         return dogOwnerEntity;
     }
     public CatOwnerRecord generateCatOwnerRecord(CatOwnerEntity catOwnerEntity, boolean needGenerate) {
-        if (needGenerate) {
-        }
         CatOwnerRecord catOwnerRecord  = new CatOwnerRecord();
         catOwnerRecord.setChatId(catOwnerEntity.getId());
         catOwnerRecord.setOwnerName(catOwnerEntity.getOwnerName());
@@ -127,8 +125,6 @@ public class Generator {
         return catOwnerRecord;
     }
     public DogOwnerRecord generateDogOwnerRecord(DogOwnerEntity dogOwnerEntity, boolean needGenerate) {
-        if (needGenerate) {
-        }
         DogOwnerRecord dogOwnerRecord  = new DogOwnerRecord();
         dogOwnerRecord.setChatId(dogOwnerEntity.getId());
         dogOwnerRecord.setOwnerName(dogOwnerEntity.getOwnerName());
